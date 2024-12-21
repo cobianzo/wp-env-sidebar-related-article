@@ -22,10 +22,11 @@ class Theme_Setup {
 		} );
 
 
-		// default for any theme
+		// default for any theme, blocks:
 		require_once __DIR__ . '/dynamic-partials-plugin/class-dynamic-partials.php';
-		require_once __DIR__ . '/functions-blocks.php';
-
+		require_once __DIR__ . '/functions-blocks.php'; // regular gutenberg blocks
+		// create modal windows
+		require_once __DIR__ . '/dynamic-partials-plugin/class-modal.php';
 
 		require_once __DIR__ . '/inc/class-theme-frontend.php';
 		require_once __DIR__ . '/inc/class-various.php';

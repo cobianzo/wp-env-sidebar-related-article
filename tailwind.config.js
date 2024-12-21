@@ -1,8 +1,9 @@
 module.exports = {
 	content: [
-		'./wp-portfolio-theme/src/**/*.{php,html,js,jsx,ts,tsx}',
-		'./wp-portfolio-theme/**/*.php',
-		'./wp-portfolio-theme/**/*.html',
+		'./src/**/*.{php,html,js,jsx,ts,tsx}',
+		'./**/*.php',
+		'./**/*.css',
+		'./**/*.html',
 		'./*.php',
 		'./**/*.php',
 	],

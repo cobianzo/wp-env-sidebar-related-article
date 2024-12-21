@@ -1,18 +1,40 @@
+DYNAMIC PARTIALS is a mini framework
+
+that allows you to build a site with php blocks that can be inserted in the editor,
+where you'll see only a placeholder.
+These php blocks are partials that can include easily a js just by creating the js file.
+
+It also includes an easy way to reload these partials whenever we want, by using
+ajax. This entails that these templates and functions will need to be ready to work
+with args or with $_POST variables.
+
+
+# Conventions
+
+
+
 edit config.php to set the folder for the
 - php templates
 - where to include the js files for the
 
 This folder deserves a little explanation. It's already mentioned in the README.md, but here we repeat it.
 
+# Differences between blocks (data-dynamic-templates-reload) and subtemplates (data-dynamic-subtemplates-reload)
+
+- blocks are created to be used in the editor
+- subtemplates are used only programmatically, form other blocks or parts
+
 # Usage:
+
 Create:
 - The action php to be called and declare as ajax
 - The template view php to reload
 - And:
 ```
-<form (optionally onsubmit="window.dynamicPartials.handleSubmitFormAndLoadTemplateAjax(event)")
-		data-dynamic-template-reload="part-edit-contribution-list"
-		class="ticker-contribution-form flex flex-row items-end justify-between">
+<form onsubmit="window.dynamicPartials.handleSubmitFormAndLoadTemplateAjax(event)"
+		data-dynamic-templates-reload=""
+		data-dynamic-subtemplates-reload="partial-example-subpartial"
+		>
 
 		<input type="hidden" name="action" value="add_contribution_year" />
 		<input type="hidden" name="ticker" value="<?php echo esc_attr( $symbol ); ?>" />
@@ -20,7 +42,7 @@ Create:
 
 		<input type="text" name="ticker" value="<?php echo esc_attr( $ticker ); ?>" />
 ```
-** * [data-dynamic-template-reload] :
+** * [data-dynamic-template-reload] or data-dynamic-subtemplates-reload:
 	the name of the file (wihtout .php) in the 'php-partials-path' ("/dynamic-partial-templates/blocks/")
 	or you can include the whole path of the partial, eg. 'dynamic-partial-templates/sub-templates/partial-show-ticker-info'
 

@@ -3,24 +3,12 @@
 // eslint-disable-next-line no-console
 console.log( '%c Public Js loaded ... ', 'background:green;color:white' );
 
+/** TODLETE */
 window.test = async function () {
-	try {
-		const formdata = new FormData();
-		formdata.append( 'action', 'example_function' );
-		formdata.append( 'number', 5 );
+	window.dynamicPartials.loadTemplateAjaxInModal(
+		'dynamic-partial-templates/blocks/part-example-template-with-js',
+		{ number: 10, modalTitle: 'TEsT TiTle' }
+	);
 
-		const response = await fetch( myJS.ajaxurl, {
-			method: 'POST',
-			body: formdata,
-		} );
-
-		if ( ! response.ok ) {
-			throw new Error( `HTTP error! status: ${ response.status }` );
-		}
-
-		const data = await response.json();
-		console.log( 'Response:', data );
-	} catch ( error ) {
-		console.error( 'Error:', error );
-	}
+	document.querySelector( '#modal-dialog' ).showModal();
 };

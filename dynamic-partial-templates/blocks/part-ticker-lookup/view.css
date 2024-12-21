@@ -1,9 +1,0 @@
-[data-template-container='part-example-template-with-js'] {
-	padding: 1rem;
-}
-
-.part-example-template-with-js {
-	.grid {
-		grid-gap: 2rem;
-	}
-}

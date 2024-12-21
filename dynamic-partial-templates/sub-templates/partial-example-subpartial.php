@@ -1,7 +1,8 @@
 <?php
 
 
-$value    = get_option( 'coco_example_todelete' );
+$value = isset( $args['number'] ) ? $args['number'] : get_option( 'coco_example_todelete', 0 );
+
 $diameter = $value * 2;
 
 $args = isset( $args ) ? $args : [];

@@ -16,7 +16,7 @@ import domReady from '@wordpress/dom-ready';
 window.dynamicPartials = {
 	// @BOOK:LOADTEMPLATEAJAX
 	// Usage: see below
-	loadTemplateAjax: async ( templateName, containerSelector, args = [] ) => {
+	loadTemplateAjax: async ( templateName, containerSelector, args = {} ) => {
 		const containerAll = document.querySelectorAll( containerSelector );
 		if ( ! containerAll ) {
 			window.dynamicPartials.err(
@@ -152,6 +152,19 @@ window.dynamicPartials = {
 				await window.dynamicPartials.handleSubmitFormAndLoadTemplateAjax( e );
 			} ); // end add event listener
 		} ); // end loop forms
+	},
+
+	loadTemplateAjaxInModal: async ( templateName, args = {} ) => {
+		const modalTitleElement = document.querySelector( '#modal-dialog h2' );
+		modalTitleElement.textContent = args.modalTitle ?? '';
+		args.in_modal = true;
+		// Load with ajax
+		window.dynamicPartials.loadTemplateAjax(
+			templateName,
+			'#modal-dialog .modal-content',
+			args
+		);
+		document.querySelector( '#modal-dialog' ).showModal();
 	},
 
 	log: ( ...args ) => {
