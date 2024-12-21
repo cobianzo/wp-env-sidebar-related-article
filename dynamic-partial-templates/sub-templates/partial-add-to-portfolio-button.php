@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Button to add the selected stock to portfolio
- * Slug: stock-templates/sub-templates/partial-add-to-portfolio-button.php
+ * Slug: dynamic-partial-templates/sub-templates/partial-add-to-portfolio-button.php
  * Categories: partials
  * Description: Use the slug to include it as get_template_part.
  * Arguments: $symbol

@@ -102,13 +102,14 @@ class Dynamic_Partials {
 				'title'           => $block_title, // eg. Part Ticker Lookup
 				'category'        => 'widgets',
 				'render_callback' => function ( array $attributes ) use ( $block_name ): string {
-					$config_file = file_get_contents( __DIR__ . '/config.json' );
 
+					$config_file = file_get_contents( __DIR__ . '/config.json' );
 					$config      = json_decode( $config_file, true );
 					$blocks_dir  = get_template_directory() . $config['php-partials-path'];
 					if ( ! file_exists( $blocks_dir . '/' . $block_name . '.php' ) ) {
 						return 'One template for dynamic blocks is not present: ' . $block_name ;
 					}
+
 					ob_start();
 						echo '<div data-dynamic-partial="' . esc_attr( $block_name ) . '">';
 						include $blocks_dir . '/' . $block_name . '.php';
@@ -217,6 +218,31 @@ JS;
 		$args = json_decode( stripslashes( $_POST['args'] ), true );
 		$args = array_intersect_key( $args, array_flip( $var_names ) );
 		return $args;
+	}
+
+	public static function get_dynamic_partial_template_part( string $name, array $args = [] ): void {
+
+		// validation
+		$name = ( '.php' === substr( $name, -4 ) ) ? substr( $name, 0, -4 ) : $name;
+
+		// TODO: convert $POSTs in $args
+		foreach ( $_POST as $key => $value ) {
+			if ( ! in_array( $key, [ 'action', 'nonce', '_wp_http_referer' ], true ) ) {
+				$args[ $key ] = sanitize_text_field( $value );
+			}
+		}
+		?>
+
+		<div class="<?php echo esc_attr( $name ); ?>"
+			data-subtemplate-container="<?php echo esc_attr( $name ); ?>"
+		>
+		<?php
+			$partial_name = 'dynamic-partial-templates/sub-templates/' . $name;
+			get_template_part( $partial_name, '', $args );
+		?>
+
+		</div>
+		<?php
 	}
 }
 

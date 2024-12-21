@@ -1,5 +1,5 @@
 import { debounce } from './helpers';
-import { searchYahooFinanceTickers, tickerExists } from './stocksInfoAPI';
+import { searchYahooFinanceTickers, tickerExists } from '../../../../inc/js/lib/stocksInfoAPI';
 
 // INPUT LOOKUP - Helper Función de búsqueda de tickers
 // =============================================

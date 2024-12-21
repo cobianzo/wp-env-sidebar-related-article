@@ -21,8 +21,8 @@ Create:
 		<input type="text" name="ticker" value="<?php echo esc_attr( $ticker ); ?>" />
 ```
 ** * [data-dynamic-template-reload] :
-	the name of the file (wihtout .php) in the 'php-partials-path' ("/stock-templates/blocks/")
-	or you can include the whole path of the partial, eg. 'stock-templates/sub-templates/partial-show-ticker-info'
+	the name of the file (wihtout .php) in the 'php-partials-path' ("/dynamic-partial-templates/blocks/")
+	or you can include the whole path of the partial, eg. 'dynamic-partial-templates/sub-templates/partial-show-ticker-info'
 
 ** * input[name="action"] the ajax name in php declared in php with the hooks
 

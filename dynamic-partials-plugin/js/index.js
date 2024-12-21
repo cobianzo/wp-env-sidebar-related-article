@@ -1,3 +1,4 @@
+// TODELETEL de momento esto no se carga
 import domReady from '@wordpress/dom-ready';
 
 domReady( () => {

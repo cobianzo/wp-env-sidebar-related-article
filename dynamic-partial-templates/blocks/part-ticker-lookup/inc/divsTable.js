@@ -1,4 +1,4 @@
-import { tickerExists, getTickerHistorical } from './stocksInfoAPI';
+import { tickerExists, getTickerHistorical } from '../../../../inc/js/lib/stocksInfoAPI';
 
 // Load the dividends by submitting the input with the ticker selected
 // ==================================
@@ -29,7 +29,7 @@ export const setupShowResultsButton = ( formSelector, resultsSelector ) => {
 		);
 		// Load the table of dividends
 		window.dynamicPartials.loadTemplateAjax(
-			'stock-templates/sub-templates/partial-dividends-table',
+			'dynamic-partial-templates/sub-templates/partial-dividends-table',
 			resultsSelector,
 			{ data: historicalData, symbol: currentTicker.symbol }
 		);

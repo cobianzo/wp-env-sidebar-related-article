@@ -33,10 +33,10 @@
 		</div>
 
 		<?php
-			$partial_subtemplate = 'stock-templates/sub-templates/partial-show-ticker-info';
+			$partial_subtemplate = 'dynamic-partial-templates/sub-templates/partial-show-ticker-info';
 		?>
 		<div class="wp-block-column" style="flex-basis:100%"
-				data-dynamic-partial="<?php echo esc_attr( $partial_subtemplate ); ?>">
+				data-template-container="<?php echo esc_attr( $partial_subtemplate ); ?>">
 			<?php
 			get_template_part( $partial_subtemplate, '', [ 'symbol' => null ] );
 			?>

@@ -20,6 +20,8 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
 	</rule>
 
+	<exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
+
 	<!-- Allow arrays with [] -->
 	<rule ref="Universal.Arrays.DisallowShortArraySyntax">
 		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found"/>

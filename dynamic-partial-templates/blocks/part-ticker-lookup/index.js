@@ -1,7 +1,7 @@
 import domReady from '@wordpress/dom-ready';
-import { setupShowResultsButton } from './part-ticker-lookup/divsTable';
-import { setupTickerSearch } from './part-ticker-lookup/lookupticker';
-import { setupAddToPortfolio } from './part-ticker-lookup/addToPortfolio';
+import { setupShowResultsButton } from './inc/divsTable';
+import { setupTickerSearch } from './inc/lookupticker';
+import { setupAddToPortfolio } from './inc/addToPortfolio';
 // GENERIC VARIABLES AND FUNCTIONS, MEANT TO BE USED BY OTHER COMPONENTS IN THE PAGE.
 // ==================================
 // ==================================
@@ -21,8 +21,8 @@ window.setSelectedTicker = ( tickerInfo ) => {
 	}
 
 	window.dynamicPartials.loadTemplateAjax(
-		'stock-templates/sub-templates/partial-show-ticker-info',
-		'[data-dynamic-partial="stock-templates/sub-templates/partial-show-ticker-info"]',
+		'dynamic-partial-templates/sub-templates/partial-show-ticker-info',
+		'[data-template-container="dynamic-partial-templates/sub-templates/partial-show-ticker-info"]',
 		{ symbol: tickerInfo ? tickerInfo.symbol : null }
 	);
 };
@@ -45,7 +45,7 @@ domReady( () => {
 		window.dynamicPartials.log( 'testing:' );
 
 		window.dynamicPartials.loadTemplateAjax(
-			'stock-templates/sub-templates/partial-dividends-table',
+			'dynamic-partial-templates/sub-templates/partial-dividends-table',
 			'#container-test',
 			{
 				data: { 2001: { title: 'a' }, 2003: { title: 'b' } },

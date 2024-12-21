@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Show Ticker Info
- * Slug: stock-templates/sub-templates/partial-show-ticker-info.php
+ * Slug: dynamic-partial-templates/sub-templates/partial-show-ticker-info.php
  * Categories: partials
  * Description: Use the slug to include it as get_template_part.
  *  Show the name a small info of the ticker
@@ -49,7 +49,7 @@ $in_portfolio = User_Controller::is_in_current_user_portfolio( $symbol );
 	>
 	<?php
 		get_template_part(
-			'stock-templates/sub-templates/partial-add-to-portfolio-button',
+			'dynamic-partial-templates/sub-templates/partial-add-to-portfolio-button',
 			'',
 		[ 'symbol' => $symbol ] );
 		?>

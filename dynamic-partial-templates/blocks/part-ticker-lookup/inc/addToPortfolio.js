@@ -32,7 +32,7 @@ const handleAddRemoveFromPortfolio = async ( event ) => {
 	// reload the template part. This can be async
 	window.dynamicPartials.log( 'TODEL reloading tempalte part.', ticker );
 	window.dynamicPartials.loadTemplateAjax(
-		'stock-templates/sub-templates/partial-add-to-portfolio-button',
+		'dynamic-partial-templates/sub-templates/partial-add-to-portfolio-button',
 		parentContainerSelector,
 		{ symbol: ticker }
 	);
@@ -40,7 +40,7 @@ const handleAddRemoveFromPortfolio = async ( event ) => {
 	// Reload the portoflio tickers
 	const parentPortfolioContainerSelector = `[data-template-container="portfolio-wrapper"]`;
 	window.dynamicPartials.loadTemplateAjax(
-		'stock-templates/blocks/part-portfolio-list',
+		'dynamic-partial-templates/blocks/part-portfolio-list',
 		parentPortfolioContainerSelector,
 		{}
 	);
