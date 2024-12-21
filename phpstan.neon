@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    paths:
+        - wp-content/themes/portfolio-theme/
+    bootstrapFiles:
+        - vendor/szepeviktor/phpstan-wordpress/bootstrap.php # Ensures WordPress functions are loaded
+    ignoreErrors:
+        - '#Function (.*) not found.#' # Ignore custom functions if necessary
+    inferPrivatePropertyTypeFromConstructor: true

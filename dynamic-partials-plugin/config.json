@@ -1,0 +1,6 @@
+{
+	"comment": "This is the configuration file for the dynamic-partials-plugin, the php files, the built js files for the template block, and the original js to compile",
+	"php-partials-path": "/stock-templates/blocks",
+	"js-path": "/build",
+	"js-source-path": "/stock-templates/blocks"
+}

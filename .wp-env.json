@@ -1,0 +1,25 @@
+{
+	"core": null,
+	"plugins": [
+		"https://downloads.wordpress.org/plugin/create-block-theme.zip",
+		"https://downloads.wordpress.org/plugin/wordpress-importer.latest-stable.zip"
+	],
+	"themes": [ "." ],
+	"config": {
+		"ALTERNATE_WP_CRON": true,
+		"PERMALINK_STRUCTURE": "/%postname%/",
+		"WP_DEBUG_DISPLAY": true,
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true
+	},
+	"env": {
+		"development": {
+			"phpVersion": "8.2",
+			"port": 8890
+		},
+		"tests": {
+			"phpVersion": "8.2",
+			"port": 8891
+		}
+	}
+}

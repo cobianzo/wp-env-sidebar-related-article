@@ -1,0 +1,55 @@
+{
+	"editor.formatOnSave": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"stylelint.enable": true,
+	"stylelint.packageManager": "npm",
+	"stylelint.validate": [ "css" ],
+	"[css]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.codeActionsOnSave": {
+			"source.fixAll.stylelint": "explicit"
+		}
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"files.autoSave": "off",
+	"[php]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": "persoderlind.vscode-phpcbf",
+		"editor.trimAutoWhitespace": false,
+		"files.trimTrailingWhitespace": false,
+		"files.insertFinalNewline": false
+	},
+	"files.trimTrailingWhitespace": false,
+	"files.trimTrailingWhitespaceInRegexAndStrings": true,
+	"phpcs.executablePath": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
+	"phpcbf.executablePath": "./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+	"phpcbf.standard": "./phpcs.xml.dist",
+	"phpcs.standard": "./phpcs.xml.dist",
+	"[xml]": {
+		"editor.defaultFormatter": "DotJoshJohnson.xml"
+	},
+	"workbench.colorCustomizations": {
+		"titleBar.activeBackground": "#dd0531",
+		"activityBar.activeBackground": "#fa1b49",
+		"activityBar.background": "#fa1b49",
+		"activityBar.foreground": "#e7e7e7",
+		"activityBar.inactiveForeground": "#e7e7e799",
+		"activityBarBadge.background": "#155e02",
+		"activityBarBadge.foreground": "#e7e7e7",
+		"commandCenter.border": "#e7e7e799",
+		"sash.hoverBorder": "#fa1b49",
+		"statusBar.background": "#dd0531",
+		"statusBar.foreground": "#e7e7e7",
+		"statusBarItem.hoverBackground": "#fa1b49",
+		"statusBarItem.remoteBackground": "#dd0531",
+		"statusBarItem.remoteForeground": "#e7e7e7",
+		"titleBar.activeForeground": "#e7e7e7",
+		"titleBar.inactiveBackground": "#dd053199",
+		"titleBar.inactiveForeground": "#e7e7e799"
+	},
+	"peacock.color": "#dd0531"
+}
