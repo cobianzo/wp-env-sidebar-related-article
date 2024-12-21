@@ -72,11 +72,15 @@ window.dynamicPartials = {
 	 * the attr 'data-dynamic-template-reload'. The templates are dynamic-partial-templates/blocks
 	 * TODO: when this form is regenerated we need to make it work
 	 *
-	 * @param {Event} e - The form submit event.
+	 * @param {Event|HTMLFormElement} e - The form submit event or the form element.
 	 */
 	handleSubmitFormAndLoadTemplateAjax: async ( e ) => {
-		e.preventDefault();
-		const sform = e.target;
+		let sform = e;
+		if ( e instanceof Event ) {
+			e.preventDefault();
+			sform = e.target;
+		}
+
 		const formdata = new FormData( sform );
 		const params = {};
 		for ( const [ key, value ] of formdata.entries() ) {
@@ -111,7 +115,7 @@ window.dynamicPartials = {
 			.then( ( data ) => {
 				window.dynamicPartials.log( `TODELETE ajax part 'handleSub...':`, data );
 				if ( data.success ) {
-					window.dynamicPartials.log( 'Ticker contribution added:', data.data );
+					window.dynamicPartials.log( 'Data sucessful after ajax call::', data.data );
 					const ajaxParams = Object.fromEntries( formdata );
 					templateNamesArray.forEach( ( templateName ) => {
 						if ( ! templateName.length ) return;

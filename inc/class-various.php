@@ -33,7 +33,6 @@ class Various {
 			$input_number = isset( $_POST['number'] ) ? intval( $_POST['number'] ) : 0;
 		}
 
-		$input_number++;
 		update_option( 'coco_example_todelete', $input_number );
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && 'example_function' === $action ) {

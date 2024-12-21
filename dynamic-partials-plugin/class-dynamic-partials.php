@@ -111,7 +111,7 @@ class Dynamic_Partials {
 					}
 
 					ob_start();
-						echo '<div data-dynamic-partial="' . esc_attr( $block_name ) . '">';
+						echo '<div data-template-container="' . esc_attr( $block_name ) . '">';
 						include $blocks_dir . '/' . $block_name . '.php';
 						echo '</div>';
 					$html = ob_get_clean();
@@ -119,6 +119,7 @@ class Dynamic_Partials {
 				},
 			];
 
+			// view_script:
 			// Check if the view script exists and register it if it does.
 			$config_file      = file_get_contents( __DIR__ . '/config.json' );
 			$config           = json_decode( $config_file, true );
@@ -135,6 +136,25 @@ class Dynamic_Partials {
 			} else {
 				// There is no frontend script for this block.
 			}
+
+			// editor_style: editor.css
+			// check if the editor css exists
+			$editor_css_path = $config['php-partials-path'] . "/$block_name/editor.css";
+			if ( file_exists( get_template_directory() . $editor_css_path ) ) {
+				$editor_css_url = get_stylesheet_directory_uri() . $editor_css_path;
+				wp_register_style( "editor-style-$block_name", $editor_css_url, [], isset( $version ) ? $version : '1.0.0' );
+				$register_block_options['editor_style'] = "editor-style-$block_name";
+			}
+
+			// style: view.css
+			// check if the view css exists
+			$view_css_path = $config['php-partials-path'] . "/$block_name/view.css";
+			if ( file_exists( get_template_directory() . $view_css_path ) ) {
+				$view_css_url = get_stylesheet_directory_uri() . $view_css_path;
+				wp_register_style( "view-style-$block_name", $view_css_url, [], isset( $version ) ? $version : '1.0.0' );
+				$register_block_options['style'] = "view-style-$block_name";
+			}
+
 
 			register_block_type(
 				$namespaced_blockname, // eg. coco/part-ticker-lookup
@@ -220,12 +240,12 @@ JS;
 		return $args;
 	}
 
-	public static function get_dynamic_partial_template_part( string $name, array $args = [] ): void {
+	public static function get_dynamic_partial_template_part( string $name, array $container_attrs = [], array $args = [] ): void {
 
 		// validation
 		$name = ( '.php' === substr( $name, -4 ) ) ? substr( $name, 0, -4 ) : $name;
 
-		// TODO: convert $POSTs in $args
+		// TODO: convert $POSTs in $args, we'll pass it to the template_part
 		foreach ( $_POST as $key => $value ) {
 			if ( ! in_array( $key, [ 'action', 'nonce', '_wp_http_referer' ], true ) ) {
 				$args[ $key ] = sanitize_text_field( $value );
@@ -233,8 +253,16 @@ JS;
 		}
 		?>
 
-		<div class="<?php echo esc_attr( $name ); ?>"
+		<div class="<?php echo esc_attr( ( isset( $container_attrs['class'] ) ? $container_attrs['class'] : '' ) . ' ' . $name ); ?>"
 			data-subtemplate-container="<?php echo esc_attr( $name ); ?>"
+			<?php
+			// write the attributes of the container, except class.
+			if ( is_array( $container_attrs ) ) {
+				foreach ( $container_attrs as $key => $value ) {
+					echo ( 'class' !== $key ) ? esc_attr( $key ) . '="' . esc_attr( $value ) . '" ' : '';
+				}
+			}
+			?>
 		>
 		<?php
 			$partial_name = 'dynamic-partial-templates/sub-templates/' . $name;

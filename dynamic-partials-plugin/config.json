@@ -1,8 +1,10 @@
 {
-	"comment": "This is the configuration file for the dynamic-partials-plugin, the php files, the built js files for the template block, and the original js to compile",
-	"comment2": "in php-partials-path there are block like `name-of-partial.php`",
+	"_comment": "This is the configuration file for the dynamic-partials-plugin, the php files, the built js files for the template block, and the original js to compile",
+	"_comment2": "in php-partials-path there are block like `name-of-partial.php`",
 	"php-partials-path": "/dynamic-partial-templates/blocks",
-	"comment3": "in js-path there are the compiled (webpack) js from $php-partials-path + `name-of-partial/index.js`",
+
+	"_comment3": "in js-path there are the compiled (webpack) js from $php-partials-path + `name-of-partial/index.js`",
 	"js-path": "/build",
+
 	"js-source-path": "/dynamic-partial-templates/blocks/*/index.js"
 }
