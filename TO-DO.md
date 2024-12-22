@@ -2,7 +2,6 @@
 
 setup husky
 typescript
-playwright
 
 # Create the action in Show Results
 

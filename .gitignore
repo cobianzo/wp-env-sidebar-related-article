@@ -36,3 +36,5 @@ logs
 
 # VSCode Setting (we leave them to ease the development)
 #.vscode/
+/playwright-report
+/test-results

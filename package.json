@@ -21,7 +21,8 @@
 		"wp-env": "wp-env",
 		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/themes/wp-env-portfolio-backtrack-theme' composer run-script test",
 		"test:php:watch": "wp-env run cli --env-cwd='wp-content/themes/wp-env-portfolio-backtrack-theme' composer run-script test:watch",
-		"test:php:setup": "wp-env start"
+		"test:php:setup": "wp-env start",
+		"test:js": "playwright test"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -31,7 +32,9 @@
 		"*.css": "npx stylelint --fix"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.49.1",
 		"@wordpress/blocks": "^12.29.0",
+		"@wordpress/e2e-test-utils-playwright": "^1.14.0",
 		"@wordpress/element": "^5.29.0",
 		"@wordpress/env": "^10.0.0",
 		"@wordpress/eslint-plugin": "^22.0.0",
@@ -46,6 +49,7 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^15.2.11",
 		"npm-run-all": "^4.1.5",
+		"playwright": "^1.49.1",
 		"prettier": "3.3.3",
 		"stylelint": "^16.12.0",
 		"stylelint-config-standard-scss": "^14.0.0",

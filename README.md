@@ -1,11 +1,23 @@
+# Summary
+
+Tailwind / phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
+
+AND
+
+dynamic-partials framework - allows you to create partials in php easily, just creating
+the .php file and inserting it into the Editor.
+There are some other conventions.
+We include a mini library to reload those partials after a change if we want to.
+
 # Start to work:
 
 ```
 npm i
 composer install
-npm run prepare
 npm run start
 ```
+
+We need Husky and CI/CD
 
 ## Developing
 
@@ -99,4 +111,10 @@ and it will be enqueued with the block as the view_script.
 it works, I copied it from the create-block-theme plugin, with some adaptations because this is a theme not a plugin. The file `bin/install-wp-tests.sh` is not used.
 
 `npm run test:php`
+
+# Playwright e2e tests
+
+'❯ npx playwright test --ui'
+ or
+ `npm run test:js`
 
