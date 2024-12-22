@@ -130,9 +130,9 @@
 				"thin": 100
 			},
 			"lineHeight": {
-				"body": 1.75,
+				"body": 1.5,
 				"heading": 1.1,
-				"medium": 1.5,
+				"medium": 1.3,
 				"one": 1
 			},
 			"spacing": {
@@ -597,7 +597,8 @@
 			},
 			"h1": {
 				"typography": {
-					"fontSize": "var(--wp--preset--font-size--max-36)"
+					"fontSize": "var(--wp--preset--font-size--max-36)",
+					"lineHeight": "1.3rem"
 				}
 			},
 			"h2": {

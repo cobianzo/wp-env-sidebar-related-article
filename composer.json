@@ -39,7 +39,13 @@
 		"automattic/vipwpcs": "^3.0",
 		"phpstan/phpstan": "^2.0",
 		"szepeviktor/phpstan-wordpress": "^2.0",
-		"phpstan/extension-installer": "^1.4"
+		"phpstan/extension-installer": "^1.4",
+		"phpunit/phpunit": "^9.6",
+		"wp-phpunit/wp-phpunit": "^6.7",
+		"yoast/phpunit-polyfills": "^1.1",
+		"brain/monkey": "^2.6",
+		"spatie/phpunit-watcher": "^1.23",
+		"sempro/phpunit-pretty-print": "^1.4"
 	},
 	"scripts": {
 		"lint": "./vendor/bin/phpcs -s --standard=phpcs.xml.dist  --extensions=php",
@@ -48,6 +54,8 @@
 		"phpcs-clear": [
 			"rm -rf ~/.composer/cache",
 			"rm -rf ~/.config/composer/cache"
-		]
+		],
+		"test": "phpunit",
+		"test:watch": "phpunit-watcher watch < /dev/tty"
 	}
 }

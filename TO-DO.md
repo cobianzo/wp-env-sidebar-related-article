@@ -1,13 +1,8 @@
 # NEXT:
 
-start with the idea of creating custom portfolios associated to user.
-think on the UI.
-phpunit
 setup husky
 typescript
-type php with interfaces too
 playwright
-start over the creation of new tempalte blocks based on forms for submission
 
 # Create the action in Show Results
 

@@ -235,6 +235,7 @@ JS;
 			return;
 		}
 
+		$var_names = array_merge( $var_names, [ 'in_modal' ] ); // we include the arg that gives info about if its modal.
 		$args = json_decode( stripslashes( $_POST['args'] ), true );
 		$args = array_intersect_key( $args, array_flip( $var_names ) );
 		return $args;

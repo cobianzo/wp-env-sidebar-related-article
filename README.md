@@ -19,6 +19,10 @@ You will normally have one or two terminal windows running:
 
 npm run wp-env run cli wp -- plugin list
 
+or if you want to actually get inside the docker container and work locally, you will run
+
+npm run wp-env run cli sh -c
+
 ### Browser Sync
 
 If you are using Local WP, your url will be something like
@@ -88,3 +92,11 @@ The system will create a block automatically and you will be able to insert it i
 You can include some js to your partial. Just follow the convention of calling the .js with the same name
 as the block. It will be compiled by wp-scripts into **/build** (thanks to a modification in `webpack.config.js`)
 and it will be enqueued with the block as the view_script.
+
+
+# PHPUNIT
+
+it works, I copied it from the create-block-theme plugin, with some adaptations because this is a theme not a plugin. The file `bin/install-wp-tests.sh` is not used.
+
+`npm run test:php`
+

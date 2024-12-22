@@ -1,6 +1,9 @@
 <?php
 
 
+// we load this template with ajax, so we need to prepare it for the ajax request
+$args = Dynamic_Partials::get_postdata_as_args_in_template( [ 'number' ] );
+
 $value = isset( $args['number'] ) ? $args['number'] : get_option( 'coco_example_todelete', 0 );
 
 $diameter = $value * 2;

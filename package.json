@@ -14,11 +14,14 @@
 		"dev": "npm start",
 		"lint:css": "stylelint '**/*.css'",
 		"format": "wp-scripts format && stylelint \"**/*.css\" --fix",
-		"format:php": "wp-env run --env-cwd='wp-content/plugins/wp-movies-demo' cli composer run-script format",
-		"lint:php": "wp-env run --env-cwd='wp-content/plugins/wp-movies-demo' cli composer run-script lint",
+		"format:php": "wp-env run --env-cwd='wp-content/themes/wp-env-portfolio-backtrack-theme' cli composer run-script format",
+		"lint:php": "wp-env run --env-cwd='wp-content/themes/wp-env-portfolio-backtrack-theme' cli composer run-script lint",
 		"lint:js": "wp-scripts lint-js",
 		"lint:js:fix": "wp-scripts format",
-		"wp-env": "wp-env"
+		"wp-env": "wp-env",
+		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/themes/wp-env-portfolio-backtrack-theme' composer run-script test",
+		"test:php:watch": "wp-env run cli --env-cwd='wp-content/themes/wp-env-portfolio-backtrack-theme' composer run-script test:watch",
+		"test:php:setup": "wp-env start"
 	},
 	"lint-staged": {
 		"*.js": [

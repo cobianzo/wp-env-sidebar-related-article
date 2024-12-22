@@ -56,4 +56,9 @@ $current_value = isset( $args['number'] ) ? $args['number'] : get_option( 'coco_
 	</div>
 </div>
 
-<button onclick="window.test();">Buttons TEST</button>
+<?php
+if ( empty( $args['in_modal'] ) ) :
+?>
+	<button onclick="window.test();">Buttons TEST</button>
+<?php
+endif;

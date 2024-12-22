@@ -1,19 +1,17 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="tests/bootstrap.php" 
-  backupGlobals="false" 
-  colors="true" 
-  convertErrorsToExceptions="true" 
-  convertNoticesToExceptions="true" 
-  convertWarningsToExceptions="true" 
-  printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinterForPhpUnit9">
-  
-  <testsuites>
-    <testsuite name="testing">
-      <directory suffix=".php">./tests/</directory>
-      <exclude>./tests/test-sample.php</exclude>
-    </testsuite>
-  </testsuites>
-  <php>
-    <env name="PHPUNIT_PRETTY_PRINT_PROGRESS" value="true" />
-  </php>
+<phpunit
+	bootstrap="tests/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	>
+	<testsuites>
+		<testsuite name="testing">
+			<directory prefix="test-" suffix=".php">./tests/</directory>
+			<!-- once you have your own tests, remove this comment -->
+			<!-- <exclude>./tests/test-sample.php</exclude> -->
+		</testsuite>
+	</testsuites>
 </phpunit>
