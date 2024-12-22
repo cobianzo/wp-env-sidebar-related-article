@@ -19,6 +19,17 @@ npm run start
 
 We need Husky and CI/CD
 
+You can install the demo sample page with:
+
+```sh
+npx wp-env run cli -- wp import wp-content/themes/wp-env-portfolio-backtrack-theme/sample-page.xml --authors=create
+
+npx wp-env run cli -- wp rewrite structure '/%postname%/'
+
+```
+
+and visit it with `http://localhost:8890/sample-page-demo`
+
 ## Developing
 
 You will normally have one or two terminal windows running:
