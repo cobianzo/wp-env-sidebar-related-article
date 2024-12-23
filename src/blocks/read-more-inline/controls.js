@@ -1,33 +1,101 @@
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, RadioControl, Spinner, SelectControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { useState } from '@wordpress/element';
+import PostLookup from '@cobianzo/gutenberg-post-lookup-component';
+
+import usePostTermsAsOptions from '../../lib/usePostTermsAsOptions';
 
 function Controls(props) {
+	const [termOptions, setTermOptions] = useState([]);
+
+	useSelect(
+		(select) => {
+			const mappingPostTax = { category: 'categories', post_tag: 'tags' };
+			const tax = mappingPostTax[props.attributes.source];
+			const terms = select('core/editor').getEditedPostAttribute(tax);
+			const options = !terms
+				? []
+				: terms
+						.map((termId) => {
+							const termObject = select('core').getEntityRecord(
+								'taxonomy',
+								props.attributes.source,
+								termId,
+								{ context: 'view' }
+							);
+							return termObject
+								? { label: termObject.name, value: termObject.id }
+								: null;
+						})
+						.filter((term) => term !== null);
+
+			setTermOptions((prevOptions) => {
+				const newOptions = [{ label: '--select term---', value: 0 }, ...options];
+				console.log('>>>> 	Options set to', newOptions);
+				setTermOptions(newOptions);
+			});
+		},
+		[props.attributes.source]
+	);
+
 	const isLoading = false;
+
+	console.log('>>>>>>Controls', props);
 	return (
 		<InspectorControls>
 			<PanelBody title="Options" initialOpen={true}>
 				<RadioControl
-					label="select a source"
+					label="Select a source"
 					selected={props.attributes.source}
-					options={{ category: 'Category', tag: 'Tag', postID: 'select post' }}
-					onChange={null}
+					options={[
+						{ label: 'Category', value: 'category' },
+						{ label: 'Tag', value: 'post_tag' },
+						{ label: 'Select post', value: 'postID' },
+					]}
+					onChange={(newValue) => props.setAttributes({ source: newValue, termID: 0 })}
 				/>
-				{isLoading === true && (
+				{isLoading && (
 					<p>
 						<Spinner />
 						<em>Loading selections...</em>
 					</p>
 				)}
-				{props.attributes.source === 'category' && (
-					<SelectControl
-						label=<strong>Select a Category Override</strong>
-						value={props.attributes.category_id}
-						options={null}
-						onChange={null}
+				{(props.attributes.source === 'category' ||
+					props.attributes.source === 'post_tag') && (
+					<>
+						<p>Select terms:</p>
+						<SelectControl
+							label={<strong>Select a Category or Tag Override</strong>}
+							value={props.attributes.termID || 0}
+							options={termOptions}
+							onChange={(newValue) => {
+								console.log(
+									'%c>>>>> newValue',
+									'color: orange; font-size:2rem;',
+									newValue
+								);
+								props.setAttributes({ termID: parseInt(newValue) });
+							}}
+						/>
+					</>
+				)}
+
+				{props.attributes.source === 'postID' && (
+					<PostLookup
+						selectedPostId={props.attributes.postID}
+						onChange={(newPostId) =>
+							props.setAttributes({
+								postID: newPostId || 0,
+							})
+						}
 					/>
 				)}
 
-				{props.attributes.source === 'post' && null}
+				<p>The VALue of termID: {props.attributes.termID} </p>
+				<p>The VALue of postID: {props.attributes.postId} </p>
+				<p>All props attr: {JSON.stringify(props.attributes)} </p>
+				<p>Options: {JSON.stringify(termOptions)}</p>
 			</PanelBody>
 		</InspectorControls>
 	);

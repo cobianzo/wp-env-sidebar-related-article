@@ -1,0 +1,111 @@
+/* Block in the Editor */
+.block-editor-block-list__block.wp-block-coco-read-more-inline,
+.wp-block-coco-read-more-inline.is-frontend {
+	border: 10px solid red;
+
+	/* this is what makes it inline */
+	display: inline-flex;
+	float: left;
+	flex-direction: column;
+	width: calc(50% - 3rem);
+	padding: 0 1rem 2rem;
+	margin: 0;
+	margin-right: 1rem;
+	min-height: 300px;
+}
+.wp-block-coco-read-more-inline {
+	a {
+		text-decoration: none !important;
+	}
+
+	/* Edge case: if two Related Article one afer the other, then the next paragraph must be normal in editor. */
+	+ .wp-block-coco-read-more-inline + .wp-block-paragraph {
+		display: block;
+		max-width: none;
+	}
+
+	/* Style of the markup shared with the frontend. */
+	.coco__relatedarticleinline {
+		background-color: #d7c17a;
+
+		/* We are floating left the block unit, which makes */
+		/* it overlayed by the paragraphs on its right. */
+		/* So we need to make it selectable by converting the */
+		/* top title in absolute pos and covering the whole block. */
+		&__content {
+			position: relative;
+			padding-top: 3rem;
+		}
+
+		&__content > h2,
+		&__handle {
+			position: absolute;
+			top: 0;
+			/* let's make it cover the whole unit */
+			width: calc(100% - 2rem);
+			height: calc(100% - 1rem);
+			z-index: 30; /* exactly one less than the block toolbar z-index. */
+			/* overlay effect to make understand it's interactive */
+			background-color: rgba(255, 255, 255, 0.2);
+			cursor: pointer;
+
+			&:hover {
+				background-color: rgba(255, 255, 255, 0);
+				box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+			}
+		}
+
+		/* 'Related Article' and the title of the Article. */
+		h2 {
+			margin: 0;
+			line-height: 1;
+			color: #000;
+		}
+
+		/* elements with padding left and right to separate from the border. */
+		&__content > h2,
+		.coco__relatedarticle__content {
+			padding: 0.5rem 1rem;
+		}
+
+		.coco__post__category {
+			display: flex;
+			margin: -2rem -1rem 0.5rem;
+			padding: 0.5rem 1rem 0.3rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			line-height: 1;
+			border-bottom: 2px solid #e33a11;
+		}
+
+		.coco__relatedarticle__content__headline {
+			.icon_quote {
+				width: 50px;
+				float: left;
+				padding-right: 0.5rem;
+
+				svg {
+					fill: var(--coco-color-primary);
+					opacity: 0.5;
+				}
+			}
+		}
+
+		.coco__relatedarticle__content__readmore {
+			display: block;
+			padding-bottom: 1rem;
+			font-weight: 600;
+			font-size: 16px;
+			font-family: 'Red Hat Display';
+			color: #e33a11;
+		}
+	}
+}
+
+.wp-block-coco-read-more-inline ~ .wp-block-heading {
+	clear: both;
+}
+
+.wp-block-coco-read-more-inline + .wp-block-heading {
+	clear: none;
+}

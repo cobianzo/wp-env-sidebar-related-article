@@ -16,6 +16,7 @@ class Plugin_Setup {
 			add_theme_support( 'custom-spacing' );
 		} );
 
+		require_once __DIR__ . '/inc/class-various.php'; // Helpers
 		require_once __DIR__ . '/functions-blocks.php'; // regular gutenberg blocks
 
 	}

@@ -15,19 +15,11 @@
       "type": "string",
       "default": "category"
     },
-    "category_id": {
+    "termID": {
       "type": "number",
       "default": ""
     },
-    "tag_id": {
-      "type": "number",
-      "default": ""
-    },
-    "post_id": {
-      "type": "number",
-      "default": null
-    },
-    "parent_post_id": {
+    "postID": {
       "type": "number",
       "default": null
     }
@@ -35,10 +27,7 @@
   "example": {
     "attributes": {
       "source": "category",
-      "category_id": 3,
-      "topic_id": "",
-      "post_id": "",
-      "parent_post_id": 5
+      "termID": 1
     }
   },
 	"editorScript": "file:./index.js",

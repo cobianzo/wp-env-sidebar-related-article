@@ -18,28 +18,22 @@ class Various {
 	}
 
 	/**
-	 * Example function
+	 * Helper function used in the CMS editor,
+	 * to display a message box at the place of the block.
+	 * If we are not in the editor, returns void.
+	 *
+	 * @param string $message
+	 * @return string
 	 */
-	public static function example_function( ?int $input_number = 0 ) {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			$action = isset( $_POST['action'] ) ? sanitize_text_field( $_POST['action'] ) : '';
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
-			if ( 'example_function' === $action ) {
-				if ( ! check_ajax_referer( 'nonce_part-example-template-with-js', 'nonce', false ) ) {
-					wp_send_json_error( 'Invalid nonce' );
-					exit;
-				}
-			}
-			$input_number = isset( $_POST['number'] ) ? intval( $_POST['number'] ) : 0;
+	public static function msg_editor_only( string $message ) : string {
+		$is_editor = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
+		if ( ! $is_editor ) {
+			return '';
 		}
-
-		update_option( 'coco_example_todelete', $input_number );
-
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && 'example_function' === $action ) {
-			wp_send_json_success( [ 'updated_value' => $input_number ] );
-		}
-
-		return $input_number;
+		return '<div class="notice wp-block-inews-related-article-inline__min-height">
+					<p class="inews__shortcode-relatedarticleinline__handle">' . wp_kses( $message, array( 'em' => [], 'br' => [] ) ) . '</p>
+				</div>
+		';
 	}
 }
 
