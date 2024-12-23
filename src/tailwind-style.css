@@ -1,6 +1,0 @@
-/* stylelint-disable */
-.tailwind-wp-wrapper {
-	@tailwind base;
-	@tailwind components;
-	@tailwind utilities;
-}

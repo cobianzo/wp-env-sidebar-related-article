@@ -1,7 +1,7 @@
 parameters:
     level: 8
     paths:
-        - wp-content/themes/portfolio-theme/
+        - wp-content/plugins/wp-env-read-more-block/
     bootstrapFiles:
         - vendor/szepeviktor/phpstan-wordpress/bootstrap.php # Ensures WordPress functions are loaded
     ignoreErrors:

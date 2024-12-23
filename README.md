@@ -22,7 +22,7 @@ We need Husky and CI/CD
 You can install the demo sample page with:
 
 ```sh
-npx wp-env run cli -- wp import wp-content/themes/wp-env-portfolio-backtrack-theme/sample-page.xml --authors=create
+npx wp-env run cli -- wp import wp-content/plugins/wp-env-read-more-block/sample-page.xml --authors=create
 
 npx wp-env run cli -- wp rewrite structure '/%postname%/'
 

@@ -2,9 +2,9 @@
 	"core": null,
 	"plugins": [
 		"https://downloads.wordpress.org/plugin/create-block-theme.zip",
-		"https://downloads.wordpress.org/plugin/wordpress-importer.latest-stable.zip"
+		"https://downloads.wordpress.org/plugin/wordpress-importer.latest-stable.zip",
+		"."
 	],
-	"themes": [ "." ],
 	"config": {
 		"ALTERNATE_WP_CRON": true,
 		"PERMALINK_STRUCTURE": "/%postname%/",

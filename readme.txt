@@ -1,4 +1,4 @@
-== portfolio-theme ==
+== read-more block plugin ==
 
 Contributors: cobianzo
 Requires at least: 6.7

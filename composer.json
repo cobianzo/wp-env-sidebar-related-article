@@ -1,5 +1,5 @@
 {
-	"name": "wordpress/portfolio-demo",
+	"name": "wordpress/read-more-inline",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"description": "Experiments to add frontend interactivity to blocks",

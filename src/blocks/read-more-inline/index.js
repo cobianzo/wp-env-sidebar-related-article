@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import Edit from './edit';
 
-registerBlockType( 'wpmovies/movie-score', {
+registerBlockType('coco/read-more-inline', {
 	edit: Edit,
 	save: () => null,
-} );
+});
