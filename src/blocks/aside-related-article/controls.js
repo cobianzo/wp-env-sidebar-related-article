@@ -7,18 +7,18 @@ import { useState } from '@wordpress/element';
 // External dependencies
 import PostLookup from '@cobianzo/gutenberg-post-lookup-component';
 
-// Internal dependencies
-import usePostTermsAsOptions from '../../lib/usePostTermsAsOptions';
-
 function Controls(props) {
 	const [termOptions, setTermOptions] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+
+	// We could convert this into a custom hook
 	useSelect(
 		(select) => {
 			setIsLoading(true);
 			const mappingPostTax = { category: 'categories', post_tag: 'tags' };
 			const tax = mappingPostTax[props.attributes.source];
 			const terms = select('core/editor').getEditedPostAttribute(tax);
+
 			const options = !terms
 				? []
 				: terms
@@ -37,7 +37,6 @@ function Controls(props) {
 
 			setTermOptions((prevOptions) => {
 				const newOptions = [{ label: '--select term---', value: 0 }, ...options];
-				console.log('>>>> 	Options set to', newOptions);
 				setTermOptions(newOptions);
 				setIsLoading(false);
 			});
@@ -45,7 +44,6 @@ function Controls(props) {
 		[props.attributes.source]
 	);
 
-	console.log('>>>>>>Controls', props);
 	return (
 		<InspectorControls>
 			<PanelBody title="Options" initialOpen={true}>
@@ -92,11 +90,6 @@ function Controls(props) {
 					/>
 				)}
 
-				<p>The VALue of termID: {props.attributes.termID} </p>
-				<p>The VALue of postID: {props.attributes.postId} </p>
-				<p>All props attr: {JSON.stringify(props.attributes)} </p>
-				<p>Options: {JSON.stringify(termOptions)}</p>
-				<p>Sent to serverside render</p>
 				<h3>
 					{['category', 'post_tag', 'postID'].includes(props.attributes.source.toString())
 						? props.attributes.source

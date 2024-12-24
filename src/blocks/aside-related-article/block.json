@@ -1,8 +1,8 @@
 {
-  "title": "Read More Article Inline",
+  "title": "Aside Related Article",
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "coco/read-more-inline",
+  "name": "coco/aside-related-article",
   "version": "1.0",
   "description": "Insert a Related Article Inline (Read Next aligned to left) with the paragraphs, on the left side of the content.",
   "category": "widgets",
@@ -10,6 +10,7 @@
   "supports": {
     "renaming": false
   },
+	"keywords": ["related article", "aside", "recirc"],
   "attributes": {
     "source": {
       "type": "string",

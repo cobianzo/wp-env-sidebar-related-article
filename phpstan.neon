@@ -1,7 +1,7 @@
 parameters:
     level: 8
     paths:
-        - wp-content/plugins/wp-env-read-more-block/
+        - wp-content/plugins/aside-related-article-block/
     bootstrapFiles:
         - vendor/szepeviktor/phpstan-wordpress/bootstrap.php # Ensures WordPress functions are loaded
     ignoreErrors:

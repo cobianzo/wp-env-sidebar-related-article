@@ -1,12 +1,21 @@
 <?php
 /**
- * Read More Block Block render.
+ * Aside Related Article Block render.
  *
- * @package coco
+ * Shows the Related Article based on the params passed as $args.
+ * This is called on the frontend and
+ * in the editor using <ServerSideRender />
+ *
+ * global params:
+ * $attributes (see block.json)
+ *
+ * @package aside-related-article-block
  */
 
+use Coco\Various;
+
 // Prepare the extra query params for the the WP Query to get the related article
-$args = [];
+$args   = [];
 $source = isset( $attributes['source'] ) ? $attributes['source'] : null;
 if ( 'postID' === $source ) {
 	if ( isset( $attributes['postID'] ) && $attributes['postID'] ) {
@@ -31,14 +40,16 @@ if ( 'postID' === $source ) {
 	}
 }
 
-$is_in_editor   = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
-$parent_post_id = get_the_ID();
-
-
+// more validation.
 if ( empty( $source ) ) {
 	echo wp_kses_post( Various::msg_editor_only( 'Please select a source' ) );
 	return;
 }
+
+// extra vars we'll need later
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$is_in_editor   = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
+$parent_post_id = get_the_ID();
 
 // in production we don't want old posts. In dev we need a larger range 'cause data is more static.
 $days_range = ( ! defined( 'VIP_GO_APP_ENVIRONMENT' ) || 'production' === VIP_GO_APP_ENVIRONMENT ) ? 30 : 180;
@@ -75,7 +86,7 @@ if ( $the_post->ID === $parent_post_id ) {
 	$the_post = $query->posts[1];
 }
 
-
+// if the source is category, get info about it.
 $cat_title = '';
 if ( isset( $args['cat'] ) ) {
 	$main_category = get_term( $args['cat'] );
@@ -91,6 +102,7 @@ if ( empty( $cat_title ) ) {
 	}
 }
 
+// The variables for the view.
 $image_id  = get_post_thumbnail_id( $the_post->ID );
 $image_src = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
 $image_src = apply_filters( 'coco_relatedarticle_image_src', $image_src, $the_post, $parent_post_id );
@@ -107,17 +119,24 @@ $the_excerpt    = apply_filters( 'coco_relatedarticle_excerpt', $the_excerpt, $t
 ?>
 
 <?php
+
+/**
+ * NOW, the HTML
+ * ====================
+ */
+
 if ( ! $is_in_editor ) :
-	?>
-	<div <?php
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo get_block_wrapper_attributes( [ 'class' => ' alignleft is-frontend' ] ); ?>
-	>
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+	<div <?php echo get_block_wrapper_attributes( [ 'class' => ' alignleft is-frontend' ] ); ?>>
 		<a class="link-wrapper-frontend" <?php echo wp_kses( $href, [ 'href' => [] ] ); ?> title="<?php echo esc_attr( $headline ); ?>">
+
 	<?php
 endif;
+
+	$container_classes = isset( $main_category ) ? 'cat-' . $main_category->slug : '';
+	$container_classes = apply_filters( 'coco_relatedarticle_classes', $container_classes, $the_post, $parent_post_id, $attributes );
 ?>
-	<div class="coco__relatedarticleinline <?php echo isset( $main_category ) ? esc_attr( 'cat-' . $main_category->slug ) : ''; ?>">
+	<div class="coco__relatedarticleinline <?php echo esc_attr( $container_classes ); ?>">
 
 		<?php if ( ! empty( $header ) ) : ?>
 			<p class="coco__relatedarticleinline--padding coco__relatedarticleinline__header"><?php echo esc_html( $header ); ?></p>
@@ -140,11 +159,11 @@ endif;
 			<?php endif; ?>
 
 			<h2 class="coco__relatedarticleinline__content__headline"><?php
-				if ( ! empty( $pre_headline ) ) {
-					echo wp_kses_post( $pre_headline );
-				}
+			if ( ! empty( $pre_headline ) ) {
+				echo wp_kses_post( $pre_headline );
+			}
 				echo wp_kses_post( $headline );
-				?>
+			?>
 			</h2>
 
 			<?php if ( ! empty( $the_excerpt ) ) : ?>

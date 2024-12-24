@@ -11,7 +11,7 @@ archive.directory('src/', 'src');
 archive.directory('vendor/', 'vendor');
 archive.directory('build/', 'build');
 archive.file('README.md', { name: 'README.md' });
-archive.file('wp-env-read-more-block.php', { name: 'wp-env-read-more-block.php' });
+archive.file('aside-related-article-block.php', { name: 'aside-related-article-block.php' });
 
 // Finalize the zip file
 archive.pipe(output);

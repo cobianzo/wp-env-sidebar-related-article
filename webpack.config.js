@@ -8,8 +8,10 @@ module.exports = [
 	...defaultConfig,
 	{
 		...defaultConfig[0],
+		/*
+		add this fore more custom bundles.
 		entry: {
 			'public-generic': './inc/js/public-generic.js',
-		},
+		}, */
 	},
 ];

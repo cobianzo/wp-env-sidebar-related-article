@@ -1,22 +1,16 @@
 <?php
+// phpcs:disable WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
+
+namespace Coco;
+
 /**
  * Class Various
  *
- * @package WP_Env_Portfolio_Backtrack_Theme
+ * @package aside-related-article-block
  */
-
-
 class Various {
 
-	/**
-	 * Init function
-	 */
-	public static function init() {
-		// Code to run on init
-		add_action( 'wp_ajax_example_function', fn() => self::example_function() );
-		add_action( 'wp_ajax_nopriv_example_function', fn() => self::example_function() );
-	}
-
+	// phpcs:disable WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 	/**
 	 * Helper function used in the CMS editor,
 	 * to display a message box at the place of the block.
@@ -25,7 +19,8 @@ class Various {
 	 * @param string $message
 	 * @return string
 	 */
-	public static function msg_editor_only( string $message ) : string {
+	public static function msg_editor_only( string $message ): string {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$is_editor = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
 		if ( ! $is_editor ) {
 			return '';
@@ -35,8 +30,5 @@ class Various {
 				</div>
 		';
 	}
-
 }
-
-// Initialize the class
-Various::init();
+// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound

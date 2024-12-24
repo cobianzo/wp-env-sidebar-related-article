@@ -1,20 +1,21 @@
-// Wordpress dependencies
+// WordPress dependencies
+import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
-import { Spinner } from '@wordpress/components';
 import ServerSideRender from '@wordpress/server-side-render';
-
-import { __ } from '@wordpress/i18n';
 
 // Internal dependencies
 import Controls from './controls';
 
-const Edit = (props) => {
-	return (
+// Styles
+import './style.css';
+
+registerBlockType('coco/aside-related-article', {
+	edit: (props) => (
 		<>
 			<Controls {...props} />
-			<div data-iseditor="true" {...useBlockProps({ className: 'alignleft is-editor' })}>
+			<div {...useBlockProps({ className: 'alignleft is-editor' })}>
 				<ServerSideRender
-					block="coco/read-more-inline"
+					block="coco/aside-related-article"
 					attributes={{
 						source: props.attributes.source.toString(),
 						termID: Number(props.attributes.termID).toFixed(0),
@@ -24,7 +25,6 @@ const Edit = (props) => {
 				/>
 			</div>
 		</>
-	);
-};
-
-export default Edit;
+	),
+	save: () => null,
+});

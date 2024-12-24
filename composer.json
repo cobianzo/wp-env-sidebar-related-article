@@ -1,20 +1,21 @@
 {
-	"name": "wordpress/read-more-inline",
+	"name": "coco/aside-related-article-block",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"description": "Experiments to add frontend interactivity to blocks",
-	"homepage": "https://wordpress.github.io/gutenberg/",
+	"homepage": "https://github.com/cobianzo/wp-env-sidebar-related-article",
 	"keywords": [
-		"block-interactivity-experiments",
 		"wordpress",
 		"wp",
 		"react",
-		"javascript"
+		"javascript",
+		"related-article",
+		"block"
 	],
 	"config": {
 		"process-timeout": 0,
 		"platform": {
-			"php": "7.4"
+			"php": "8.2"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
