@@ -12,18 +12,15 @@ const Edit = (props) => {
 	return (
 		<>
 			<Controls {...props} />
-			<div {...useBlockProps()}>
-				<p>{props.attributes.source}</p>
+			<div data-iseditor="true" {...useBlockProps({ className: 'alignleft is-editor' })}>
 				<ServerSideRender
 					block="coco/read-more-inline"
-					LoadingResponsePlaceholder={'Loading'}
 					attributes={{
-						source: ['category', 'post_tag', 'postID'].includes(props.attributes.source)
-							? props.attributes.source
-							: 'category',
-						termID: props.attributes.termID,
-						postID: props.attributes.postID,
+						source: props.attributes.source.toString(),
+						termID: Number(props.attributes.termID).toFixed(0),
+						postID: Number(props.attributes.postID).toFixed(0),
 					}}
+					className="idle-wrapper iddle-wrapper--editor"
 				/>
 			</div>
 		</>

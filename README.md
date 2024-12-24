@@ -1,6 +1,9 @@
+
+add the import with wp cli.
+
 # Summary
 
-Tailwind / phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
+wp-env / wp-scripts (experimental) /phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
 
 AND
 

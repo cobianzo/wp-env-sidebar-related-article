@@ -4,23 +4,37 @@
  *
  * @package coco
  */
-$args = [];
 
+// Prepare the extra query params for the the WP Query to get the related article
+$args = [];
 $source = isset( $attributes['source'] ) ? $attributes['source'] : null;
-if ( 'postID' === $source && isset( $attributes['postID'] ) ) {
-	$args['p'] = $attributes['postID'];
-} elseif ( 'category' === $source && isset( $attributes['termID'] ) ) {
-	$args['cat'] = $attributes['termID'];
-} elseif ( 'post_tag' === $source && isset( $attributes['termID'] ) ) {
-	$args['tag_id'] = $attributes['termID'];
+if ( 'postID' === $source ) {
+	if ( isset( $attributes['postID'] ) && $attributes['postID'] ) {
+		$args['p'] = $attributes['postID'];
+	} else {
+			echo wp_kses_post( Various::msg_editor_only( 'Select a post in the dropdown.' ) );
+			return;
+	}
+} elseif ( 'category' === $source ) {
+	if ( isset( $attributes['termID'] ) && $attributes['termID'] ) {
+		$args['cat'] = $attributes['termID'];
+	} else {
+		echo wp_kses_post( Various::msg_editor_only( 'Select a category in the dropdown. <br/> The dropdown will allow to select only categories included in the current post' ) );
+		return;
+	}
+} elseif ( 'post_tag' === $source ) {
+	if ( isset( $attributes['termID'] ) && $attributes['termID'] ) {
+		$args['tag_id'] = $attributes['termID'];
+	} else {
+		echo wp_kses_post( Various::msg_editor_only( 'Select a tag in the dropdown. <br/> The dropdown will allow to select only tags included in the current post' ) );
+		return;
+	}
 }
 
-$is_editor      = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
+$is_in_editor   = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
 $parent_post_id = get_the_ID();
 
-echo 'GET CURRENT ID: ' . $parent_post_id;
 
-echo class_exists( 'Various' ) ? 'The class Various exists.' : 'not exists';
 if ( empty( $source ) ) {
 	echo wp_kses_post( Various::msg_editor_only( 'Please select a source' ) );
 	return;
@@ -44,14 +58,8 @@ $args       = array_merge( array(
 	'date_query'             => array( 'after' => "-$days_range days at midnight" ),
 ), $args );
 
-echo '<br>';
-print_r( $attributes );
-echo '<pre>';
-print_r( $args );
-echo '</pre>';
 $query = new \WP_Query( $args );
 
-echo "<br>FOUMND:". count($query->posts);
 // Found no posts; exit
 if ( ! $query->have_posts() ) {
 	echo wp_kses_post( Various::msg_editor_only( 'Sorry. There are no posts' ) );
@@ -67,59 +75,100 @@ if ( $the_post->ID === $parent_post_id ) {
 	$the_post = $query->posts[1];
 }
 
-$header         = 'Related Article';
-$pre_title      = '<span style="color: red;">➲➲</span>';
-$short_title    = get_the_title( $the_post );
-$long_title     = get_the_title( $the_post );
-$image_src      = 'https://via.placeholder.com/150';
-$cat_title      = 'Politics';
-$cat_link       = '#';
-$is_in_editor   = false;
-$read_more_text = __( 'read more', 'coco' );
-$is_opinion     = false;
 
-echo ' GETTTT : ';
-print_r( $_GET );
-echo 'is editorr:: '. $is_editor;
+$cat_title = '';
+if ( isset( $args['cat'] ) ) {
+	$main_category = get_term( $args['cat'] );
+	if ( ! is_wp_error( $main_category ) ) {
+		$cat_title = $main_category->name;
+	}
+}
+if ( empty( $cat_title ) ) {
+	$categories = get_the_category( $the_post->ID );
+	if ( ! empty( $categories ) ) {
+		$main_category = $categories[0];
+		$cat_title     = $main_category->name;
+	}
+}
+
+$image_id  = get_post_thumbnail_id( $the_post->ID );
+$image_src = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+$image_src = apply_filters( 'coco_relatedarticle_image_src', $image_src, $the_post, $parent_post_id );
+
+$header         = __( 'Related Article', 'coco' );
+$header         = apply_filters( 'coco_relatedarticle_header', $header, $the_post, $parent_post_id );
+$href           = ! $is_in_editor ? ' href="' . get_permalink( $the_post ) . '" ' : '';
+$headline       = get_the_title( $the_post );
+$pre_headline   = '<span>⦿</span>'; // use an svg better
+$read_more_text = apply_filters( 'coco_relatedarticle_header', __( 'read more', 'coco' ), $the_post, $parent_post_id );
+$the_excerpt    = wp_trim_words( get_the_excerpt( $the_post ), 20, '...' );
+$the_excerpt    = apply_filters( 'coco_relatedarticle_excerpt', $the_excerpt, $the_post, $parent_post_id );
+
 ?>
 
-
-<div <?php
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo get_block_wrapper_attributes(
-		[ 'class' => ( $is_editor ? 'is-editor' : 'is-frontend' ) ]
-	); ?>>
-	<div class="coco__relatedarticleinline__content">
+<?php
+if ( ! $is_in_editor ) :
+	?>
+	<div <?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo get_block_wrapper_attributes( [ 'class' => ' alignleft is-frontend' ] ); ?>
+	>
+		<a class="link-wrapper-frontend" <?php echo wp_kses( $href, [ 'href' => [] ] ); ?> title="<?php echo esc_attr( $headline ); ?>">
+	<?php
+endif;
+?>
+	<div class="coco__relatedarticleinline <?php echo isset( $main_category ) ? esc_attr( 'cat-' . $main_category->slug ) : ''; ?>">
 
 		<?php if ( ! empty( $header ) ) : ?>
-			<h2><?php echo esc_html( $header ); ?></h2>
+			<p class="coco__relatedarticleinline--padding coco__relatedarticleinline__header"><?php echo esc_html( $header ); ?></p>
 		<?php endif; ?>
 
-		<a class="coco__relatedarticle__media" <?php echo wp_kses( $href, [ 'href' => [] ] ); ?> title="<?php echo esc_attr( $long_title ); ?>">
-			<figure>
-				<img src="<?php echo esc_url( $image_src ); ?>" alt="<?php echo esc_attr( $long_title ); ?>"></img>
-			</figure>
-		</a>
+		<?php if ( ! empty( $image_src ) ) : ?>
+			<div class="coco__relatedarticleinline__media">
+				<figure>
+					<img src="<?php echo esc_url( $image_src ); ?>" alt="<?php echo esc_attr( $headline ); ?>"></img>
+				</figure>
+			</div>
+		<?php endif; ?>
 
-		<div class="coco__relatedarticle__content">
-			<a class="coco__relatedarticle__category coco__post__badge" <?php
-				echo ( $cat_link && ! $is_in_editor ) ? 'href="' . esc_url( $cat_link ) . '"' : ''
-			?>>
-				<?php echo esc_html( $cat_title ); ?>
-			</a>
-			<a <?php echo wp_kses( $href, ['href' => [] ] ); ?> title="<?php echo esc_attr( $long_title ); // phpcs:ignore  ?>"
-				class="coco__relatedarticle__content__headline">
-				<?php echo ! empty( $is_opinion ) ? '⍘⍘' : ''; //phpcs:ignore ?>
-				<?php echo wp_kses( $pre_title, array( 'span' => [ 'class' => [] ], 'style' => [] ) ); //phpcs:ignore ?>
-				<h2><?php echo wp_kses_post( $short_title ); ?></h2>
-			</a>
-			<?php if ( ! empty( $read_more_text ) ) : ?>
-				<a <?php echo wp_kses( $href, [ 'href' => [] ] ); ?>
-					class="coco__relatedarticle__content__readmore"
-					title="<?php echo esc_attr( $long_title ); ?>">
-					<?php echo esc_html( $read_more_text ); ?>
-				</a>
+		<div class="coco__relatedarticleinline__content coco__relatedarticleinline--padding">
+
+			<?php if ( ! empty( $cat_title ) ) : ?>
+				<div class="coco__relatedarticleinline__category coco__post__badge">
+					<?php echo esc_html( $cat_title ); ?>
+				</div>
 			<?php endif; ?>
+
+			<h2 class="coco__relatedarticleinline__content__headline"><?php
+				if ( ! empty( $pre_headline ) ) {
+					echo wp_kses_post( $pre_headline );
+				}
+				echo wp_kses_post( $headline );
+				?>
+			</h2>
+
+			<?php if ( ! empty( $the_excerpt ) ) : ?>
+				<p class="coco__relatedarticleinline__excerpt"><?php echo wp_kses_post( $the_excerpt ); ?></p>
+			<?php endif; ?>
+
+			<?php if ( ! empty( $read_more_text ) ) : ?>
+				<button
+					class="coco__relatedarticleinline__content__readmore"
+					title="<?php echo esc_attr( $headline ); ?>">
+					<?php echo esc_html( $read_more_text ); ?>
+				</button>
+			<?php endif; ?>
+
 		</div>
 	</div>
-</div>
+
+<?php
+if ( ! $is_in_editor ) :
+	// close .idle-wrapper and .is-frontend
+	?>
+		</a>
+	</div>
+	<?php
+endif;
+
+

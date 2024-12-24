@@ -35,6 +35,7 @@ class Various {
 				</div>
 		';
 	}
+
 }
 
 // Initialize the class

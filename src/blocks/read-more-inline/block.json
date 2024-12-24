@@ -6,7 +6,7 @@
   "version": "1.0",
   "description": "Insert a Related Article Inline (Read Next aligned to left) with the paragraphs, on the left side of the content.",
   "category": "widgets",
-  "icon": "table",
+	"icon": "post-status",
   "supports": {
     "renaming": false
   },
@@ -17,11 +17,11 @@
     },
     "termID": {
       "type": "number",
-      "default": ""
+      "default": 0
     },
     "postID": {
       "type": "number",
-      "default": null
+      "default": 0
     }
   },
   "example": {
