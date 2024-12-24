@@ -11,7 +11,7 @@ function Controls(props) {
 	const [termOptions, setTermOptions] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
-	// We could convert this into a custom hook
+	// We could convert this into a custom hook (@TODO)
 	useSelect(
 		(select) => {
 			setIsLoading(true);
@@ -29,13 +29,11 @@ function Controls(props) {
 								termId,
 								{ context: 'view' }
 							);
-							return termObject
-								? { label: termObject.name, value: termObject.id }
-								: null;
+							return termObject ? { label: termObject.name, value: termObject.id } : null;
 						})
 						.filter((term) => term !== null);
 
-			setTermOptions((prevOptions) => {
+			setTermOptions(() => {
 				const newOptions = [{ label: '--select term---', value: 0 }, ...options];
 				setTermOptions(newOptions);
 				setIsLoading(false);
@@ -59,22 +57,14 @@ function Controls(props) {
 				/>
 
 				{isLoading && <Spinner />}
-				{(props.attributes.source === 'category' ||
-					props.attributes.source === 'post_tag') && (
+				{(props.attributes.source === 'category' || props.attributes.source === 'post_tag') && (
 					<>
 						<p>Select terms:</p>
 						<SelectControl
-							label={<strong>Select a Category or Tag Override</strong>}
+							label={<strong>Select a Category or Tag</strong>}
 							value={props.attributes.termID || 0}
 							options={termOptions}
-							onChange={(newValue) => {
-								console.log(
-									'%c>>>>> newValue',
-									'color: orange; font-size:2rem;',
-									newValue
-								);
-								props.setAttributes({ termID: parseInt(newValue) });
-							}}
+							onChange={(newValue) => props.setAttributes({ termID: parseInt(newValue) })}
 						/>
 					</>
 				)}
@@ -89,14 +79,6 @@ function Controls(props) {
 						}
 					/>
 				)}
-
-				<h3>
-					{['category', 'post_tag', 'postID'].includes(props.attributes.source.toString())
-						? props.attributes.source
-						: 'category'}
-					<br />
-					termID: {props.attributes.termID}, postID: {props.attributes.postID},
-				</h3>
 			</PanelBody>
 		</InspectorControls>
 	);

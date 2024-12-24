@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Sidebar Related Article Block
+ * Plugin Name: Aside Related Article Block
  * Description: A custom block for displaying a "Related Article" widget, and it will be displayed inline on the left of the content
  * Version: 1.0.0
  * Author: @cobianzo
@@ -15,5 +15,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+define( 'DUMMY_DATA_GENERATOR', true );
 
 require_once plugin_dir_path( __FILE__ ) . 'class-plugin-setup.php';

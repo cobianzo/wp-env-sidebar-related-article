@@ -3,10 +3,10 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"stylelint.enable": true,
 	"stylelint.packageManager": "npm",
-	"stylelint.validate": [ "css" ],
+	"stylelint.validate": ["css"],
 	"[css]": {
 		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "stylelint.vscode-stylelint",
 		"editor.codeActionsOnSave": {
 			"source.fixAll.stylelint": "explicit"
 		}
@@ -18,7 +18,6 @@
 	"files.autoSave": "off",
 	"[php]": {
 		"editor.formatOnSave": false,
-		"editor.defaultFormatter": "persoderlind.vscode-phpcbf",
 		"editor.trimAutoWhitespace": false,
 		"files.trimTrailingWhitespace": false,
 		"files.insertFinalNewline": false

@@ -10,13 +10,6 @@
 class Functions_Blocks {
 
 	/**
-	 * currently not in use
-	 *
-	 * @var array key the slug of the block, vaue the file path.
-	 */
-	public $blocks = [];
-
-	/**
 	 * Constructor. Hooks call
 	 */
 	public function __construct() {
@@ -29,14 +22,17 @@ class Functions_Blocks {
 	 * @return void
 	 */
 	public function register_blocks(): void {
+
 		// Register custom blocks here
 		if ( file_exists( __DIR__ . '/build/blocks/' ) ) {
 			$block_json_files = glob( __DIR__ . '/build/blocks/*/block.json' );
 
+			if ( false === $block_json_files ) {
+				wp_die( 'error scanning folder ' . __DIR__ . '/build/blocks/*/block.json' );
+			}
+
 			// auto register all blocks that were found.
 			foreach ( $block_json_files as $filename ) {
-				$this->blocks[ basename( $filename ) ] = $filename;
-
 				$block_folder = dirname( $filename );
 				register_block_type( $block_folder );
 			}

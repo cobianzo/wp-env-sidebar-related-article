@@ -10,6 +10,7 @@ import Controls from './controls';
 import './style.css';
 
 registerBlockType('coco/aside-related-article', {
+	/* eslint-disable react-hooks/rules-of-hooks */
 	edit: (props) => (
 		<>
 			<Controls {...props} />
@@ -28,3 +29,5 @@ registerBlockType('coco/aside-related-article', {
 	),
 	save: () => null,
 });
+
+/* eslint-enable react-hooks/rules-of-hooks */

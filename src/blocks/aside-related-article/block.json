@@ -1,36 +1,37 @@
 {
-  "title": "Aside Related Article",
-  "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 3,
-  "name": "coco/aside-related-article",
-  "version": "1.0",
-  "description": "Insert a Related Article Inline (Read Next aligned to left) with the paragraphs, on the left side of the content.",
-  "category": "widgets",
+	"title": "Aside Related Article",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "coco/aside-related-article",
+	"version": "1.0",
+	"description": "Insert a Related Article Inline (Read Next aligned to left) with the paragraphs, on the left side of the content.",
+	"category": "widgets",
 	"icon": "post-status",
-  "supports": {
-    "renaming": false
-  },
+	"supports": {
+		"renaming": false,
+		"align": ["left", "right"]
+	},
 	"keywords": ["related article", "aside", "recirc"],
-  "attributes": {
-    "source": {
-      "type": "string",
-      "default": "category"
-    },
-    "termID": {
-      "type": "number",
-      "default": 0
-    },
-    "postID": {
-      "type": "number",
-      "default": 0
-    }
-  },
-  "example": {
-    "attributes": {
-      "source": "category",
-      "termID": 1
-    }
-  },
+	"attributes": {
+		"source": {
+			"type": "string",
+			"default": "category"
+		},
+		"termID": {
+			"type": "number",
+			"default": 0
+		},
+		"postID": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"example": {
+		"attributes": {
+			"source": "category",
+			"termID": 1
+		}
+	},
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php",
 	"style": "file:./style-index.css"

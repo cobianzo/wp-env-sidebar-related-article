@@ -21,14 +21,22 @@
 		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run-script test",
 		"test:php:watch": "wp-env run cli --env-cwd='wp-content/plugins/aside-related-article-block' composer run-script test:watch",
 		"test:php:setup": "wp-env start",
-		"test:js": "playwright test"
+		"test:js": "playwright test",
+		"prepare": "husky"
+	},
+	"stylelint": {
+		"extends": "@wordpress/stylelint-config/scss"
 	},
 	"lint-staged": {
 		"*.js": [
 			"wp-scripts lint-js",
 			"wp-scripts format"
 		],
-		"*.css": "npx stylelint --fix"
+		"*.css": "npx stylelint --fix",
+		"*.php": [
+			"composer lint .",
+			"composer format ."
+		]
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.49.1",

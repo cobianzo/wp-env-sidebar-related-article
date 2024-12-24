@@ -25,16 +25,18 @@ export default defineConfig({
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		/* Base URL to use in actions like `await page.goto('/')`. */
-		baseURL: 'http://localhost:8890',
+		baseURL: 'http://localhost:8891',
 		command: 'wp-env start',
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
 		trace: 'on-first-retry',
 		viewport: { width: 1280, height: 800 },
+		timeout: 60000,
+		// screenshot: 'only-on-failure',
 		ignoreHTTPSErrors: true,
 	},
 	webServer: {
 		command: 'wp-env start',
-		port: 8890,
+		port: 8891,
 		reuseExistingServer: true,
 		timeout: 120000,
 	},

@@ -3,10 +3,12 @@
 	use `.wp-block-coco-aside-related-article.is-frontend` to select only the markup in the frontend
 */
 
+/* stylelint-disable selector-class-pattern */
+
 /*
 	Variables (only for this component)
 */
-.wp-block-coco-aside-related-article {
+div.wp-block-coco-aside-related-article {
 	--coco-related-article-header-font-size: var(--wp--preset--font-size--large, 1.5rem);
 
 	--coco-related-article-background-color: #fef2f1;
@@ -17,8 +19,9 @@
 /*
 	Only in the editor
 */
-.block-editor-block-list__block.wp-block-coco-aside-related-article.is-editor {
-	& * {
+.wp-block-coco-aside-related-article.is-editor {
+
+	* {
 		pointer-events: none;
 	}
 
@@ -37,6 +40,7 @@
 	Only frontend
 */
 .wp-block-coco-aside-related-article.is-frontend {
+
 	/* There are no links in the editor, only frontend */
 	a {
 		text-decoration: none;
@@ -47,15 +51,23 @@
 			filter: brightness(0.8) contrast(1.2);
 			transition: filter 0.5s ease-in-out;
 		}
-		.coco__relatedarticleinline {
+
+		.coco-related-article {
 			transition: border 0.5s ease-in-out;
 		}
+
 		&:hover {
+
 			img {
 				filter: none;
 			}
-			.coco__relatedarticleinline {
+
+			.coco-related-article {
 				border-color: var(--coco-related-article-accent);
+			}
+
+			h2 {
+				text-decoration: underline;;
 			}
 		}
 	}
@@ -65,8 +77,10 @@
 	Both editor and frontend
 */
 .wp-block-coco-aside-related-article {
+
 	/* the inner div that I could not remove in the editor */
-	> div,
+
+	> div, /* stylelint-disable-next-line no-descending-specificity */
 	> a {
 		display: flex;
 	}
@@ -90,19 +104,20 @@
 	 - Now the aestethics of the block itself:
 	 background color, paddings etc.
 	*/
-	.coco__relatedarticleinline {
+	/* stylelint-disable-next-line no-descending-specificity */
+	.coco-related-article {
 		padding-bottom: 1rem;
 		background-color: var(--coco-related-article-background-color);
 		border-radius: 5px;
 		border: 1px solid #444111;
 		width: 100%;
 
-		.coco__relatedarticleinline--padding {
+		.coco-related-article--padding {
 			padding-inline: 1rem;
 		}
 
-		.coco__relatedarticleinline__header {
-			font-weight: bold;
+		.coco-related-article__header {
+			font-weight: 700;
 			padding-block-start: 1rem;
 			padding-block-end: 0.5rem;
 			margin: 0;
@@ -111,20 +126,25 @@
 			line-height: 1.2;
 		}
 
-		.coco__relatedarticleinline__media {
+		.coco-related-article__media {
 			display: flex;
 
 			figure {
 				display: flex;
-				margin: 0;
+                margin: 0;
+
+                width: 100%;
 
 				img {
 					max-width: 100%;
+					flex: 1 0 100%;
+                    aspect-ratio: var(--wp--preset--aspect-ratio--3-2);
+                    object-fit: cover;
 				}
 			}
 		}
 
-		.coco__relatedarticleinline__category {
+		.coco-related-article__category {
 			border: 1px solid var(--coco-related-article-accent);
 			display: inline-block;
 			border-radius: 15px;
@@ -132,13 +152,14 @@
 			padding: 0.1rem 0.9rem;
 			text-transform: uppercase;
 			letter-spacing: 1px;
-			font-weight: bold;
+			font-weight: 700;
 			margin-block-start: 1rem;
 			background: rgb(0 0 0 / 0.2);
 		}
 
-		.coco__relatedarticleinline__content__headline {
-			& > * {
+		.coco-related-article__content__headline {
+
+			> * {
 				display: inline;
 			}
 
@@ -146,19 +167,20 @@
 			font-size: var(--coco-related-article-header-font-size);
 			margin-block: 1rem;
 
+			/* the circle on the left (pre_heading) */
 			span {
 				color: var(--coco-related-article-muted);
 				padding-inline-end: 0.5rem;
 			}
 		}
 
-		.coco__relatedarticleinline__excerpt {
+		.coco-related-article__excerpt {
 			color: var(--coco-related-article-muted);
 			font-size: var(--wp--preset--font-size--small);
 			margin: 0;
 		}
 
-		.coco__relatedarticleinline__content__readmore {
+		.coco-related-article__content__readmore {
 			color: var(--coco-related-article-accent);
 			font-size: var(--wp--preset--font-size--small);
 			text-transform: uppercase;
@@ -175,3 +197,6 @@
 .wp-block-coco-aside-related-article + .wp-block-heading {
 	clear: none;
 }
+
+
+/* stylelint-enable selector-class-pattern */

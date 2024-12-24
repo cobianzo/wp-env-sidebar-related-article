@@ -3,6 +3,11 @@
 
 wp-env / wp-scripts (experimental) / phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
 
+This plugin creates a block called **Aside Related Article**. When inserted, it shows a widget in one side of the text,
+floated to the left, with the preview of the related article. You can choose what related article you want to display,
+or you can let the system find the newsest on the category or tag that you choose (amont the cats and tags associated to
+the current post).
+
 ## Dependencies
 
 - package `@cobianzo/gutenberg-post-lookup-component`
@@ -74,15 +79,33 @@ You will normally have one or two terminal windows running:
 
 `npm run browser-sync` > if you want to work on `http://localhost:3000` and have the hot reload.
 
+I suggest to watch the e2e tests as you work.
+This can't be done right now in terminal, but you can do it either using the
+playwright ui ( `npm run test -- --ui` ) or using the VSCode Playwright Test and activate the watch.
 
-## After making changes in js, css and php files
+**PHP lint**
+
+Lint your work. In a php file run the `composer lint <name.php>` and `composer format <name.php>` in any file.
+Use `composer analize <name.php>` for deep linting.
+From time to time run it for the whole project `composer lint .` and `composer format .`.
+
+**JS lint**
+
+With prettier, your files js and css should format automatically on save.
+
+`npm run lint:js` - lints all files (for a reason in my last work it doesnt seem to work)
+
+`npm run lint:css` - lints all files
+
+## Summary: After making changes in js, css and php files
 
 Linting formatting js, css, and php files.
 
+For PHP
 ```
 npm run format
 composer lint .
-composer analyze .
+composer analyze <name.php>
 (or > npm run lint:php)
 composer format .
 ```
@@ -96,9 +119,15 @@ phpcs, phpcbf, eslint, stylelint, prettier
 
 it works, I copied it from the create-block-theme plugin, with some adaptations because this is a theme not a plugin. The file `bin/install-wp-tests.sh` is not used.
 
+It's not really needed for this simple plugin, where there are no php functionalities or APIs on itself. You can run it individually or with watch
+
 `npm run test:php`
 
+`npm run test:php:watch`
+
 # Playwright e2e tests
+
+check the 'readme-how-to-test.md'. You'll find tips about how to test. There is an e2e test with dummy data.
 
 `❯ npx playwright test --ui`
 
@@ -109,8 +138,9 @@ it works, I copied it from the create-block-theme plugin, with some adaptations 
 # TODO
 
 - Add support to align the block to the left or right
-- add more filters and actions to the block.
-- We need Husky and CI/CD
+- We need CI/CD (circle CI or git hooks)
 - Refactor to typescript
-- Add e2e testing
 - Transform most of the styles in the css into json styles, with variations.
+- Create a version bump script
+- Create the script to publish the plugin
+- Create screenshots and a video demo and upload it to my website
