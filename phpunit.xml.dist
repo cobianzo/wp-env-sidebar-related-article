@@ -14,4 +14,14 @@
 			<!-- <exclude>./tests/test-sample.php</exclude> -->
 		</testsuite>
 	</testsuites>
+
+	<php>
+		<env name="PHPUNIT_PRETTY_PRINT_PROGRESS" value="true" />
+		<!--
+		we run phpunit in two envs: inside wp-env and in github actions.
+		for github actions we use this env var, but we set it in the command line
+		with WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test
+		<env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php" />
+		-->
+	</php>
 </phpunit>

@@ -39,3 +39,4 @@ logs
 /playwright-report
 /test-results
 .phpunit.result.cache
+.phpunit.result.cache
