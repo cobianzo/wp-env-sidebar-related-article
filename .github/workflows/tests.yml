@@ -29,8 +29,6 @@ jobs:
           --health-retries=3
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
@@ -54,6 +52,11 @@ jobs:
         echo "DROP DATABASE IF EXISTS wp_wordpress_test;" | mysql -u root --password=root --host=127.0.0.1
         wp db create --allow-root
         wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
+
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        path: wp-content/plugins
 
     - name: Activate Plugin
       run: wp plugin activate aside-related-article-block --allow-root
