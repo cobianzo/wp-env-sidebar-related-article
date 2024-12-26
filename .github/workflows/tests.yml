@@ -51,6 +51,7 @@ jobs:
       run: |
         wp core download --allow-root
         wp config create --dbname=wp_wordpress_test --dbuser=root --dbpass=root --dbhost=127.0.0.1 --allow-root
+        echo "DROP DATABASE IF EXISTS wp_wordpress_test;" | mysql -u root --password=root --host=127.0.0.1
         wp db create --allow-root
         wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
 
