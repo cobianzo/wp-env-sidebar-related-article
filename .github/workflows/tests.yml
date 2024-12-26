@@ -1,46 +1,61 @@
 name: PHPUnit Tests
 
 on:
-    pull_request:
-    push:
-        branches:
-            - develop
-            - main
-
-# Cancels all previous workflow runs for pull requests that have not completed.
-concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
-    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
-    cancel-in-progress: true
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
-    test:
-        name: PHP Unit tests
-        runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
+  test:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wp_wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
-            - name: Use desired version of PHP (7.4 with xdebug)
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '8.2'
-                  coverage: xdebug
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-            - name: Composer install
-              run: composer install
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        extensions: mysqli
 
-            - name: Running the PHPUnit tests
-              continue-on-error: true
-              run: npm run test:php
+    - name: Install Composer dependencies
+      run: composer install
 
-            - name: npm packages installation
-              run: npm i
+    - name: Install WP-CLI
+      run: |
+        curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+        chmod +x wp-cli.phar
+        sudo mv wp-cli.phar /usr/local/bin/wp
 
-            - name: Running the E2E Playwright tests
-              continue-on-error: true
-              run: npm run test:js
+    - name: Set up WordPress
+      run: |
+        wp core download --allow-root
+        wp config create --dbname=wp_wordpress_test --dbuser=root --dbpass=root --dbhost=127.0.0.1 --allow-root
+        wp db create --allow-root
+        wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
+
+    - name: Activate Plugin
+      run: wp plugin activate aside-related-article-block --allow-root
+
+    - name: Run PHPUnit
+      run: vendor/bin/phpunit

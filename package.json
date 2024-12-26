@@ -31,7 +31,8 @@
 		"test:php:setup": "wp-env start",
 		"test:js": "playwright test",
 		"prepare": "husky",
-		"plugin-zip": "node .github/scripts/build-plugin.js"
+		"plugin-zip": "node .github/scripts/build-plugin.js",
+		"lint-staged": "lint-staged"
 	},
 	"stylelint": {
 		"extends": "@wordpress/stylelint-config/scss"
