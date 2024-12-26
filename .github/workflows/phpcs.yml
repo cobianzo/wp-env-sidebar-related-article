@@ -1,38 +1,31 @@
-name: PHPCS check
+name: PHPCS check on Pull Request
 
 on:
-    pull_request:
-    push:
-        branches:
-            - develop
-            - main
-
-concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-    cancel-in-progress: true
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
-    phpcs:
-        name: Run PHPCS checks
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+  phpcs-lint:
+    runs-on: ubuntu-latest
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '7.4'
-                  ini-values: 'memory_limit=1G'
-                  coverage: none
-                  tools: cs2pr
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
 
-            - name: Install Composer dependencies
-              run: composer update
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        tools: composer
 
-            - name: Run PHPCS checks
-              run: composer run lint -- --report=checkstyle > phpcs-report.xml
+    - name: Install dependencies
+      run: composer install --no-progress --no-suggest
 
-            - name: Show PHPCS results in PR
-              if: ${{ always() && steps.phpcs.outcome == 'failure' }}
-              run: cs2pr phpcs-report.xml
+    - name: Run PHPCS
+      run: composer lint .
