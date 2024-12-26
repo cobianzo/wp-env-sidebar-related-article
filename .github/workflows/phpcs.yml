@@ -1,38 +1,56 @@
+# phpcs.yml
+
 name: PHPCS check
 
 on:
-    pull_request:
-    push:
-        branches:
-            - develop
-            - main
-
-concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-    cancel-in-progress: true
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
-    phpcs:
-        name: Run PHPCS checks
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+  phpcs-lint:
+    runs-on: ubuntu-latest
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '7.4'
-                  ini-values: 'memory_limit=1G'
-                  coverage: none
-                  tools: cs2pr
+    strategy:
+      matrix:
+        php-version: ['8.2']
 
-            - name: Install Composer dependencies
-              run: composer update
+    steps:
+    # Step 1: Checkout the code
+    - name: Check out code
+      uses: actions/checkout@v3
 
-            - name: Run PHPCS checks
-              run: composer run lint -- --report=checkstyle > phpcs-report.xml
+    # Step 2: Set up PHP
+    - name: Set up PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        tools: composer, cs2pr # Agrega cs2pr como herramienta preinstalada
 
-            - name: Show PHPCS results in PR
-              if: ${{ always() && steps.phpcs.outcome == 'failure' }}
-              run: cs2pr phpcs-report.xml
+    # Step 3: Install Composer dependencies
+    - name: Install Composer dependencies
+      run: composer install --no-progress --no-suggest
+
+    # Step 4: Run PHPCS lint command
+    - name: Run PHPCS lint
+      run: |
+        composer run lint -- --report=checkstyle > phpcs-report.xml
+
+    # Step 5: Report PHPCS results as PR annotations
+    - name: Annotate PHPCS report
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+        cs2pr < phpcs-report.xml
+
+    # Step 6: Fail job if there are errors
+    - name: Fail on PHPCS errors
+      run: |
+        if grep -q "<error" phpcs-report.xml; then
+          echo "PHPCS found errors. Failing the job.";
+          exit 1;
+        fi
