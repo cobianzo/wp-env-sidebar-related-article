@@ -50,15 +50,21 @@ jobs:
         wp db create --allow-root
         wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
 
+    - name: Print current path 2
+      run: |
+        ls
+        cd wp-content/plugins
+        ls
+
     - name: Check out repository
       uses: actions/checkout@v3
       with:
-        path: wp-content/plugins
+        path: wp-content/plugins/aside-related-article-block
 
     - name: Activate Plugin
       run: wp plugin activate aside-related-article-block --allow-root
 
-    - name: Print current path
+    - name: Print current path 2
       run: |
         pwd
         cd wp-content/plugins
