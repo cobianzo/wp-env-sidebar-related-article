@@ -36,9 +36,6 @@ jobs:
         php-version: 8.2
         extensions: mysqli
 
-    - name: Install Composer dependencies
-      run: composer install
-
     - name: Install WP-CLI
       run: |
         curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -61,5 +58,15 @@ jobs:
     - name: Activate Plugin
       run: wp plugin activate aside-related-article-block --allow-root
 
+    - name: Print current path
+      run: pwd
+
+    - name: Install composer
+      run: |
+        cd wp-content/plugins/aside-related-article-block
+        composer install
+
     - name: Run PHPUnit
-      run: vendor/bin/phpunit
+      run: |
+        cd wp-content/plugins/aside-related-article-block
+        ./vendor/bin/phpunit
