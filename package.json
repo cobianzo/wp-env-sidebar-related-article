@@ -1,8 +1,16 @@
 {
 	"name": "aside-related-article-block",
-	"version": "0.2.0",
+	"version": "1.0.0",
 	"author": "@cobianzo",
 	"license": "GPL-2.0-or-later",
+	"homepage": "https://github.com/cobianzo/wp-env-sidebar-related-article",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cobianzo/wp-env-sidebar-related-article.git"
+	},
+	"bugs": {
+		"url": "https://github.com/cobianzo/wp-env-sidebar-related-article/issues"
+	},
 	"scripts": {
 		"up": "wp-env start",
 		"down": "wp-env stop",
@@ -12,17 +20,18 @@
 		"dev": "npm start",
 		"lint:css": "stylelint '**/*.css'",
 		"format": "wp-scripts format && stylelint \"**/*.css\" --fix",
-		"format:php": "wp-env run --env-cwd='wp-content/plugins/aside-related-article-block' cli composer run-script format",
-		"lint:php": "wp-env run --env-cwd='wp-content/plugins/aside-related-article-block' cli composer run-script lint",
+		"format:php": "wp-env run --env-cwd='wp-content/plugins/aside-related-article-block' cli composer run format",
+		"lint:php": "wp-env run --env-cwd='wp-content/plugins/aside-related-article-block' cli composer run lint",
 		"lint:js": "wp-scripts lint-js",
 		"lint:js:fix": "wp-scripts format",
 		"wp-env": "wp-env",
 		"wpcli": "wp-env run cli -- wp ",
-		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run-script test",
-		"test:php:watch": "wp-env run cli --env-cwd='wp-content/plugins/aside-related-article-block' composer run-script test:watch",
+		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run test",
+		"test:php:watch": "wp-env run cli --env-cwd='wp-content/plugins/aside-related-article-block' composer run test:watch",
 		"test:php:setup": "wp-env start",
 		"test:js": "playwright test",
-		"prepare": "husky"
+		"prepare": "husky",
+		"plugin-zip": "node .github/scripts/build-plugin.js"
 	},
 	"stylelint": {
 		"extends": "@wordpress/stylelint-config/scss"

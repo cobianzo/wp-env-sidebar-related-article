@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="3.11.2">
+<file name="/Users/alvaroblancocobian/Sites/formacion/wp-formacion/wp-env-and-phpunit/aside-related-article-block/class-plugin-setup.php">
+ <error line="19" column="36" severity="error" message="There must not be a space before the colon in a return type declaration" source="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
+</file>
+</checkstyle>

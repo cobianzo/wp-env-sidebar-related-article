@@ -1,0 +1,46 @@
+name: PHPUnit Tests
+
+on:
+    pull_request:
+    push:
+        branches:
+            - develop
+            - main
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    test:
+        name: PHP Unit tests
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Use desired version of PHP (7.4 with xdebug)
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  coverage: xdebug
+
+            - name: Composer install
+              run: composer install
+
+            - name: Running the PHPUnit tests
+              continue-on-error: true
+              run: npm run test:php
+
+            - name: npm packages installation
+              run: npm i
+
+            - name: Running the E2E Playwright tests
+              continue-on-error: true
+              run: npm run test:js

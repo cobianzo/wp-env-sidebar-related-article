@@ -3,6 +3,7 @@ name: Build Plugin ZIP
 on:
     push:
         branches:
+            - develop
             - main
 
 jobs:
@@ -57,7 +58,7 @@ jobs:
               run: composer install --no-dev
 
             - name: Install npm dependencies
-              run: npm ci
+              run: npm install
 
             - name: Build plugin
               run: npm run build
@@ -65,9 +66,9 @@ jobs:
             - name: Create plugin ZIP file
               run: npm run plugin-zip
 
-            - name: Release
-              uses: softprops/action-gh-release@v1
-              with:
-                  tag_name: ${{ needs.bump-version.outputs.new_version }}
-                  files: |
-                      wp-read-mode-block-plugin.zip
+            # - name: Release
+            #   uses: softprops/action-gh-release@v1
+            #   with:
+            #       tag_name: ${{ needs.bump-version.outputs.new_version }}
+            #       files: |
+            #           aside-related-article-block.zip

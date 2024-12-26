@@ -26,6 +26,7 @@ the related article, and the most recent one will be selected.
 1. In the WordPress block editor, search for the "Aside Related Article" block.
 2. Add the block to your post or page where you want the related articles to appear.
 3. Customize the block settings to select the related articles you want to display.
+4. Align the block left/or right of your content text.
 4. Save your changes and publish the post or page.
 
 ## Changelog

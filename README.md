@@ -59,28 +59,18 @@ Maybe you'll need to run
 npx wp-env run cli -- wp plugin activate wordpress-importer
 npx wp-env run cli -- wp plugin activate aside-related-article-block
 
-```sh
-
-npx wp-env run cli -- wp import wp-content/plugins/aside-related-article-block/themeunittestdata.wordpress.xml --authors=create
-
-npx wp-env run cli -- wp rewrite structure '/%postname%/'
-
-npx wp-env run cli -- wp rewrite flush --hard
-```
-
-and visit it with `http://localhost:8890/wp-6-1-spacing-presets`
-
+from here you can create dummy data, see `tests/class-create-dummy-data.php`, or import it with `npx wp-env run cli -- wp import wp-content/plugins/aside-related-article-block/themeunittestdata.wordpress.xml --authors=create`
 
 ## Developing
 
 You will normally have one or two terminal windows running:
 
-`npm run start` > runs the tailwind compilation on every change, and if you are writing js in /src, it will compile it into /build with wp-scripts
+`npm run start` > uses wp-scripts to compile the block into /build and watch changes.
 
 `npm run browser-sync` > if you want to work on `http://localhost:3000` and have the hot reload.
 
-I suggest to watch the e2e tests as you work.
-This can't be done right now in terminal, but you can do it either using the
+I suggest to watch the **e2e tests** as you work.
+This can't be done right now in terminal (the watching), but you can do it either using the
 playwright ui ( `npm run test -- --ui` ) or using the VSCode Playwright Test and activate the watch.
 
 **PHP lint**
@@ -91,7 +81,8 @@ From time to time run it for the whole project `composer lint .` and `composer f
 
 **JS lint**
 
-With prettier, your files js and css should format automatically on save.
+With prettier, your files js and css should format automatically on save
+(you shouldnt need to run `npm run lint:js`).
 
 `npm run lint:js` - lints all files (for a reason in my last work it doesnt seem to work)
 
@@ -135,12 +126,19 @@ check the 'readme-how-to-test.md'. You'll find tips about how to test. There is 
 
  `npm run test:js`
 
+ # Deploy the .zip plugin
+
+`node .github/scripts/build-plugin.js`
+
+will create `aside-related-article-block.zip` in the root folder
+
 # TODO
 
-- Add support to align the block to the left or right
 - We need CI/CD (circle CI or git hooks)
 - Refactor to typescript
 - Transform most of the styles in the css into json styles, with variations.
 - Create a version bump script
-- Create the script to publish the plugin
+- Create the script to publish the plugin. Run it every time 'main' branch is updated.
 - Create screenshots and a video demo and upload it to my website
+- Extend the tests for mobile devices and for other wordpress versions/themes
+- Localization

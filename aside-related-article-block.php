@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DUMMY_DATA_GENERATOR', true );
+$is_local = str_contains( get_option( 'siteurl' ), 'localhost' );
+define( 'DUMMY_DATA_GENERATOR', $is_local );
 
 require_once plugin_dir_path( __FILE__ ) . 'class-plugin-setup.php';
