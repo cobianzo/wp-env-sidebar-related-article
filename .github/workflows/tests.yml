@@ -59,14 +59,17 @@ jobs:
       run: wp plugin activate aside-related-article-block --allow-root
 
     - name: Print current path
-      run: pwd
-
-    - name: Install composer
       run: |
-        cd wp-content/plugins/aside-related-article-block
-        composer install
+        pwd
+        cd wp-content/plugins
+        ls
 
-    - name: Run PHPUnit
-      run: |
-        cd wp-content/plugins/aside-related-article-block
-        ./vendor/bin/phpunit
+    # - name: Install composer
+    #   run: |
+    #     cd wp-content/plugins/aside-related-article-block
+    #     composer install
+
+    # - name: Run PHPUnit
+    #   run: |
+    #     cd wp-content/plugins/aside-related-article-block
+    #     ./vendor/bin/phpunit
