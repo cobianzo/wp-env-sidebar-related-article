@@ -1,6 +1,4 @@
-# phpcs.yml
-
-name: PHPCS check
+name: PHPCS check on Pull Request
 
 on:
   push:
@@ -16,41 +14,18 @@ jobs:
   phpcs-lint:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-version: ['8.2']
-
     steps:
-    # Step 1: Checkout the code
-    - name: Check out code
+    - name: Checkout the code
       uses: actions/checkout@v3
 
-    # Step 2: Set up PHP
-    - name: Set up PHP ${{ matrix.php-version }}
+    - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-version }}
-        tools: composer, cs2pr # Agrega cs2pr como herramienta preinstalada
+        php-version: 8.2
+        tools: composer
 
-    # Step 3: Install Composer dependencies
-    - name: Install Composer dependencies
+    - name: Install dependencies
       run: composer install --no-progress --no-suggest
 
-    # Step 4: Run PHPCS lint command
-    - name: Run PHPCS lint
-      run: |
-        composer run lint -- --report=checkstyle > phpcs-report.xml
-
-    # Step 5: Report PHPCS results as PR annotations
-    - name: Annotate PHPCS report
-      if: ${{ github.event_name == 'pull_request' }}
-      run: |
-        cs2pr < phpcs-report.xml
-
-    # Step 6: Fail job if there are errors
-    - name: Fail on PHPCS errors
-      run: |
-        if grep -q "<error" phpcs-report.xml; then
-          echo "PHPCS found errors. Failing the job.";
-          exit 1;
-        fi
+    - name: Run PHPCS
+      run: composer lint .

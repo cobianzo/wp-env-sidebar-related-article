@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="3.11.2">
-<file name="/Users/alvaroblancocobian/Sites/formacion/wp-formacion/wp-env-and-phpunit/aside-related-article-block/class-plugin-setup.php">
- <error line="19" column="36" severity="error" message="There must not be a space before the colon in a return type declaration" source="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
+<file name="/Users/alvaroblancocobian/Sites/formacion/wp-formacion/wp-env-and-phpunit/aside-related-article-block/aside-related-article-block.php">
+ <error line="19" column="64" severity="error" message="Space after closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterCloseBracket"/>
+ <error line="19" column="70" severity="error" message="Space found before semicolon; expected &quot;);&quot; but found &quot;)     ;&quot;" source="Squiz.WhiteSpace.SemicolonSpacing.Incorrect"/>
 </file>
 </checkstyle>
