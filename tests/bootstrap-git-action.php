@@ -17,11 +17,11 @@ Beware, $_ENV is not the same as getenv() when running outside wp-env
 
 
 if ( ! file_exists( getenv( 'WP_PHPUNIT__TESTS_CONFIG' ) ) ) {
-	echo PHP_EOL . 'In this setup of PHPUnit, we need the file wp-config.php in getenv "WP_PHPUNIT`__TESTS_CONFIG" '
+	echo PHP_EOL . '⚠️ In this setup of PHPUnit, we need the file wp-config.php in getenv "WP_PHPUNIT`__TESTS_CONFIG" '
 		. PHP_EOL . 'Try' . PHP_EOL .'WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test' . PHP_EOL;
 	exit;
 } else {
-	echo PHP_EOL . 'found ' . getenv('WP_PHPUNIT__TESTS_CONFIG') . PHP_EOL;
+	echo PHP_EOL . '✔️ Found ' . getenv('WP_PHPUNIT__TESTS_CONFIG') . PHP_EOL;
 }
 
 // wordpress for testing is installed with wp cli
@@ -47,7 +47,7 @@ if ( false !== $_phpunit_polyfills_path ) {
 }
 
 if ( ! file_exists( "{$_wp_unit_vendor}/includes/functions.php" ) ) {
-	echo "Could not find {$_wp_unit_vendor}/includes/functions.php, hace you run composer install, and set the WP_PHPUNIT__DIR env var ?" . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo "⚠️ Could not find {$_wp_unit_vendor}/includes/functions.php, hace you run composer install, and set the WP_PHPUNIT__DIR env var ?" . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	exit( 1 );
 }
 
@@ -57,11 +57,18 @@ require_once $_wp_unit_vendor . '/includes/functions.php';
 /**
  * Manually load the plugin being tested.
  */
-// function _manually_load_plugin() {
-// 	echo "-------- ERRER " .dirname( dirname( __FILE__ ) ) . '/aside-related-article-block.php';
-// 	require dirname( dirname( __FILE__ ) ) . '/aside-related-article-block.php';
-// }
-// tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+function _manually_load_plugin() {
+	$plugin_path = dirname( dirname( __FILE__ ) ) . '/aside-related-article-block.php';
+	if ( ! file_exists( $plugin_path ) ) {
+		echo '⚠️ >>>>>>>>>>> ERROR Plugin not found at ' . $plugin_path . PHP_EOL;
+		return;
+	}
+	echo  PHP_EOL . '===========' . PHP_EOL .
+		'✔️ Artificially required the plugin at ' . PHP_EOL .
+		$plugin_path . PHP_EOL. '===========' . PHP_EOL;
+	require $plugin_path;
+}
+tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 // Start up the WP testing environment.
 require "{$_wp_unit_vendor}/includes/bootstrap.php";

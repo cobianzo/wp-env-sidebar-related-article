@@ -62,9 +62,14 @@ define('NONCE_SALT',       '|D;XUOhEJ/FsQJjwF6}S[.Di=`TksKSYVfsR`B@=gI^0):|n`q.G
 
 $table_prefix = 'wp_';   // Only numbers, letters, and underscores please!
 
-define('WP_TESTS_DOMAIN', 'example.org');
+define('WP_TESTS_DOMAIN', 'localhost.org'); // needs to be localhost so PHP unit knows it's in testing mode.
 define('WP_TESTS_EMAIL', 'admin@example.org');
 define('WP_TESTS_TITLE', 'Test Blog');
+
+// important. Tell phpUNIT that we are not in production.
+if ( ! defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+	define( 'WP_ENVIRONMENT_TYPE', 'development' ); // Options: 'development', 'staging', 'production'
+}
 
 define('WP_PHP_BINARY', 'php');
 

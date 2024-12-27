@@ -11,6 +11,13 @@ class InsertBlockTest extends WP_UnitTestCase {
 
 		echo PHP_EOL . PHP_EOL . 'TEST 2' . PHP_EOL . '=========' . PHP_EOL ;
 
+		// if not running phpUnit in wp env, the plugin might not be activated by default
+		$plugin_file = 'aside-related-article-block/aside-related-article-block.php';
+		if ( ! is_plugin_active( $plugin_file ) ) {
+			echo PHP_EOL . '>>> ⚠️ 2) Needed activation of plugin' . PHP_EOL . '=========' . PHP_EOL ;
+			activate_plugin( $plugin_file );
+		}
+
 		// create dummy data with our own factory class
 		Create_Dummy_Data::reset_dummy_data( ['echo' => false] );
 		Create_Dummy_Data::create_dummy_terms( ['echo' => false] );
@@ -31,7 +38,7 @@ class InsertBlockTest extends WP_UnitTestCase {
 	 */
 	public function test_insert_coco_aside_related_article_block() {
 
-		echo PHP_EOL . PHP_EOL . '---- 2.1) Test to verify that the block is inserted correctly in the post content. Created dummy data' . PHP_EOL;
+		echo PHP_EOL . PHP_EOL . '---- 2.1) Test to verify that the block is inserted correctly in the post content' . PHP_EOL;
 
 		// Grab category "Politics" if it does not exist and get its term ID.
 		$category = get_category_by_slug( 'politics' );
@@ -43,9 +50,9 @@ class InsertBlockTest extends WP_UnitTestCase {
 
 		// Block attributes.
 		$block_attributes = [
-			'source' => 'category',
+			// 'source' => 'category', 'category is the default value, so it SHOULD NOT be included!
 			'termID' => $category_id,
-			'postID' => 0,
+			// 'postID' => 0,
 		];
 
 		// Create the block in serialized format.
@@ -67,22 +74,27 @@ class InsertBlockTest extends WP_UnitTestCase {
 		]);
 
 		if ( is_wp_error( $result ) ) {
-			$this->assertTrue(
-				false,
-				'FAIL 2.1: Could not update post ' . $post_id . '. Error: ' . $result->get_error_message()
-				. PHP_EOL . '---------' . PHP_EOL
-			);
+			echo '❌ FAIL 2.1: Could not update post ' . $post_id . '. Error: ' . $result->get_error_message() . PHP_EOL . '---------' . PHP_EOL;
 			return $result;
 		}
 		$post = get_post( $result );
+
 		// Get the post content after update.
-		$content = $post->post_content;
+		$content = trim( $post->post_content );
 
 		// Check that the block is inserted correctly.
-		$this->assertStringContainsString( $block_name, $content, 'The block is not inserted correctly.' );
-		$this->assertStringContainsString( '"termID":' . $category_id, $content, 'The termID attribute does not match.' );
+		// Parse the blocks from the post content
+		$parsed_blocks = parse_blocks($content );
 
-		echo PHP_EOL . 'OK: block insterted correctly in post ' . $post->ID . ': ' . $post->post_title . PHP_EOL
+		$this->assertNotEmpty($parsed_blocks, '❌ FAIL 2.1 Parsed blocks should not be empty.');
+
+		// Verify the block structure
+		$block = $parsed_blocks[0];
+
+		$this->assertEquals($block_name, $block['blockName'], '❌ FAIL 2.1 Block name should match.');
+		$this->assertEquals($block_attributes, $block['attrs'], '❌ FAIL 2.1 Block attributes should match.');
+
+		echo PHP_EOL . '✅ OK 2.1: block insterted correctly in post ' . $post->ID . ': ' . $post->post_title . PHP_EOL
 		. $content . PHP_EOL . '---------' . PHP_EOL;
 	}
 }
