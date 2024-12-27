@@ -70,4 +70,6 @@ jobs:
         composer install
 
     - name: Run PHPUnit with wp-config pointing to DB
-      run: WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test
+      run: |
+        cd wp-content/plugins/aside-related-article-block
+        WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test
