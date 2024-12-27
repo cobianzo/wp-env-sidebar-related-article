@@ -1,49 +1,10 @@
 <?php
-/**
- * PHPUnit bootstrap file.
- *
- * @package Wp_Env_Portfolio_Backtrack_Theme
- */
 
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
-
-if ( ! $_tests_dir ) {
-	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
+if ( 'tests-mysql' === getenv( 'WORDPRESS_DB_HOST' ) ) {
+	// we are in wp-env (local), we know it because the host is tests-mysql and the db is tests-wordpress
+	require 'bootstrap-wp-env.php';
+} else {
+	// we are in github actions, in wp-content/plugins/aside-related-article-block/ folder of  wordpress installation
+	require 'bootstrap-git-action.php';
 }
-
-if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
-	echo esc_html( "Could not find {$_tests_dir}/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL );
-	exit( 1 );
-}
-
-// Give access to tests_add_filter() function.
-require_once "{$_tests_dir}/includes/functions.php";
-
-/**
- * Registers theme.
- */
-function _register_theme() {
-
-	$theme_dir     = dirname( __DIR__ );
-	$current_theme = basename( $theme_dir );
-	$theme_root    = dirname( $theme_dir );
-
-	add_filter( 'theme_root', function () use ( $theme_root ) {
-		return $theme_root;
-	} );
-
-	register_theme_directory( $theme_root );
-
-	add_filter( 'pre_option_template', function () use ( $current_theme ) {
-		return $current_theme;
-	} );
-
-	add_filter( 'pre_option_stylesheet', function () use ( $current_theme ) {
-		return $current_theme;
-	} );
-}
-
-tests_add_filter( 'muplugins_loaded', '_register_theme' );
-
-// Start up the WP testing environment.
-require "{$_tests_dir}/includes/bootstrap.php";
+return;

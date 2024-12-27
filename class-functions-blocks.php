@@ -7,6 +7,8 @@
  * Check /src/blocks/*\/index.js for the registration in the js side.
  */
 
+namespace Coco;
+
 class Functions_Blocks {
 
 	/**

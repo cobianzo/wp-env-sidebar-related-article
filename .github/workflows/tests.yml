@@ -18,7 +18,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: wp_wordpress_test
         ports:
           - 3306:3306
@@ -29,8 +29,6 @@ jobs:
           --health-retries=3
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
@@ -38,24 +36,38 @@ jobs:
         php-version: 8.2
         extensions: mysqli
 
-    - name: Install Composer dependencies
-      run: composer install
-
     - name: Install WP-CLI
       run: |
         curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
         chmod +x wp-cli.phar
         sudo mv wp-cli.phar /usr/local/bin/wp
 
-    - name: Set up WordPress
+    - name: Set up WordPress at the root
       run: |
         wp core download --allow-root
-        wp config create --dbname=wp_wordpress_test --dbuser=root --dbpass=root --dbhost=127.0.0.1 --allow-root
+        wp config create --dbname=wp_wordpress_test --dbuser=root --dbpass=password --dbhost=127.0.0.1 --allow-root
+        echo "DROP DATABASE IF EXISTS wp_wordpress_test;" | mysql -u root --password=password --host=127.0.0.1
         wp db create --allow-root
         wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
 
-    - name: Activate Plugin
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        path: wp-content/plugins/aside-related-article-block
+
+    - name: Build bundles of the plugin
+      run: |
+        cd wp-content/plugins/aside-related-article-block
+        npm install
+        npm run build
+
+    - name: Activate Plugin (not needed)
       run: wp plugin activate aside-related-article-block --allow-root
 
-    - name: Run PHPUnit
-      run: vendor/bin/phpunit
+    - name: Install composer
+      run: |
+        cd wp-content/plugins/aside-related-article-block
+        composer install
+
+    - name: Run PHPUnit with wp-config pointing to DB
+      run: WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test

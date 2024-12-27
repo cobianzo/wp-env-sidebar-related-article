@@ -41,7 +41,10 @@ class PluginActivation extends WP_UnitTestCase {
 		activate_plugin( $plugin_file );
 
 		// Verify the plugin is active.
-		$this->assertTrue( is_plugin_active( 'aside-related-article-block/aside-related-article-block.php' ), 'The plugin did not activate correctly.' );
+		$this->assertTrue(
+				is_plugin_active( 'aside-related-article-block/aside-related-article-block.php' ),
+				'FAIL: The plugin did not activate correctly.'
+			);
 
 		echo PHP_EOL . 'OK: Plugin activated correctly';
 
@@ -58,14 +61,14 @@ class PluginActivation extends WP_UnitTestCase {
 			// Activa el plugin.
 			activate_plugin( $plugin_file );
 
-			$fb = new Functions_Blocks();
-			$fb->register_blocks();
+			// $fb = new Coco\Functions_Blocks();
+			// $fb->register_blocks();
 			$this->assertTrue(
 				WP_Block_Type_Registry::get_instance()->is_registered( 'coco/aside-related-article' ),
-				'Functions_Blocks "coco/aside-related-article" doesnt register coco/aside-related-article.'
+				'FAIL: Functions_Blocks doesnt register coco/aside-related-article.'
 			);
 
-			echo PHP_EOL . 'OK: Functions_Blocks "coco/aside-related-article" doesnt register coco/aside-related-article.';
+			echo PHP_EOL . 'OK: Functions_Blocks registers coco/aside-related-article.';
 
 	}
 }

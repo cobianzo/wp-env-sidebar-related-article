@@ -26,3 +26,18 @@ npx wp-env run tests-cli -- wp plugin activate aside-related-article-block
 	- to easily access to the screenshots and inspect them after the test is ran.
 - At some point, with console logs you won't need to see the browser. It consumes too many resources.
 	- Just run te test and check the console logs and errors in the TEST RESULTS tab of VSCode.
+
+# TEST SUITES in phpunit
+
+PHPUnit is not very useful in this project, but it has been set up and works.
+Initially I set it up loading it in wp-env environment: `"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run test",`
+
+We run it in two cases:
+- when developing in local (npm run test:php)
+- in git action when pushing to repo
+
+## PHPUnit in local
+
+## PHPUnit in git action (Github)
+- check the workflow test.yml. There I install a full wordpress with WP CLI, place the plugin by
+cloning the repo, and run `composer run test`, which uses
