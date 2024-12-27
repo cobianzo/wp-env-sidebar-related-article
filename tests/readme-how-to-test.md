@@ -1,4 +1,6 @@
-# TEST SUITES in playwright
+# TEST SUITES in PHPUnit and playwright
+
+# Playwright E2E
 
 ## Tips
 - aside-related-article-block.spec.js is the only test made so far.
@@ -9,13 +11,12 @@
 	- we set it in playwright.config.js
 - If we need to reset the test DB:
 
-IMPORTANT: in real development I had to run this several times.
+**IMPORTANT**: in real development I had to run this several times.
 ```
 npx wp-env run tests-cli wp db reset --yes
 npx wp-env run tests-cli wp core install --url="http://localhost:8891" --title="Mi Test Site WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
 npx wp-env run tests-cli -- wp plugin activate aside-related-article-block
 ```
-
 
 - In my computer, sometimes I run out of memory creating dummy data by hand
 	- So I created a page that, when visited, creates everything (only if it was not created before) -  tests/class-create-dummy-data.php.
@@ -27,15 +28,22 @@ npx wp-env run tests-cli -- wp plugin activate aside-related-article-block
 - At some point, with console logs you won't need to see the browser. It consumes too many resources.
 	- Just run te test and check the console logs and errors in the TEST RESULTS tab of VSCode.
 
-# TEST SUITES in phpunit
+# TEST SUITES in PHPUnit
 
-We run it in two cases:
-- when developing in local (npm run test:php)
-- in git action when pushing to repo
+We run it in two different environments, two cases:
+- when developing in local (`npm run test:php` and `npm run test:php:watch`)
+- in git action when pushing to repo (in workflow `tests.yml`)
 
-PHPUnit is not very useful in this project, but it has been set up and works, even in the watching mode
+PHPUnit is not very useful in this project, but it has been set up and works, even in the watching mode.
+But the watching mode is magic, it works ok over the wp-env test database.
 
-I suggest you run in watch mode (`npm run test:php:watch` which uses `composer run test:watch`).
+## Watch mode: works great
+
+- I suggest you run in watch mode: `npm run test:php:watch` (which uses `composer run test:watch`).
+- It will clean the test database every time it runs.
+- It will reload every time you edit the test code, but it doesnt reload when you work in the project
+- Use ENTER from time to time to reload the testing inthe terminal running the watch mode
+- Note that in watch mode, in composer, we set the env IS_WATCHING=true so we use th right `bootstrap.php`
 
 > **Important Note**: The phpUnit test is set differently when we work in wp-env development, from when we run the tests in github actions or anywhere outside wp-env. That is why
 `test/bootstrap.php` calls two different .php files, for different setups.
@@ -47,10 +55,14 @@ I suggest you run in watch mode (`npm run test:php:watch` which uses `composer r
 	- wp-env phpunit takes longer because we install WP every time we run it.
 	- wp-env apparently works better because when I'm outside it, I need to call `do_action('init')` for it to work
 
-	- The PHPUnit WATCH MODE works very well. It set ups wp differently, creates a different DB ... but it works
-	- I call it in composer setting a env var IS_WATCHING, to use the bootstrap.php for the wp-env envionrment.
+	- The PHPUnit WATCH MODE works very well. (I insist)
+	- Again: I call it in composer setting a env var IS_WATCHING, to use the bootstrap.php for the wp-env envionment.
 
 ## PHPUnit in git action (Github)
+
 	- in github actions, check .github/workflows/tests.yml
-	- There I install a full wordpress with WP CLI, place the plugin by
-cloning the repo, and run `composer run test`, which uses
+	- There I install a full WordPress with WP CLI, place the plugin by
+cloning the repo, and run `WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test`, which uses
+the connection to the DB that we have just created
+	- We can simulate the same steps by working in local.
+	- wp-env apparently works better because in this git action case, I need to call `do_action('init')` for it to work

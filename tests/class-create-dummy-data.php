@@ -190,7 +190,7 @@ class Create_Dummy_Data {
 					echo '<div style="display:flex; gap:1rem; border: 1px solid gray; padding: 1rem;">';
 					echo '<div class="column">';
 
-					echo '<h4>Attachments (' . count( $attachments ) . '):</h4>';
+					echo '<h3>Attachments (' . count( $attachments ) . '):</h3>';
 					echo '<ul>';
 					foreach ( $attachments as $attachment ) {
 						echo '<li>' . esc_html( $attachment->post_title ) . '<br>';
@@ -206,35 +206,36 @@ class Create_Dummy_Data {
 					echo '</div>';
 					echo '<div class="column">';
 
-					echo '<h4>Posts:</h4>';
+					echo '<h3>Posts:</h3>';
 					$posts = get_posts( array( 'numberposts' => -1 ) );
 					echo '<ul>';
-					foreach ( $posts as $post ) {
+
+					foreach ( $posts as $i => $post ) {
 						echo '<li><a class="test-post-link-' . esc_attr( $i ) . '" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '" target="new">' .
 							esc_html( $post->post_title ) .
-						'</a></li>';
+						'</a>&nbsp;&nbsp;<a href="'. get_permalink( $post->ID ).'" target="new"> 🔗 ' . esc_html( $post->ID ) . '</a> </li>';
 					}
 					echo '</ul>';
 
 					echo '</div>';
 					echo '<div class="column">';
 
-					echo '<h4>Terms:</h4>';
+					echo '<h3>Terms:</h3>';
 					$categories = get_categories( array( 'hide_empty' => false ) );
-					echo '<h5>Categories:</h5>';
-					echo '<ul>';
+					echo '<h4>Categories:</h4>';
+					echo '<ol>';
 					foreach ( $categories as $category ) {
 						echo '<li>' . esc_html( $category->name ) . '</li>';
 					}
-					echo '</ul>';
+					echo '</ol>';
 
 					$tags = get_tags( array( 'hide_empty' => false ) );
-					echo '<h5>Tags:</h5>';
-					echo '<ul>';
+					echo '<h4>Tags:</h4>';
+					echo '<ol>';
 					foreach ( $tags as $tag ) {
 						echo '<li>' . esc_html( $tag->name ) . '</li>';
 					}
-					echo '</ul>';
+					echo '</ol>';
 				} else {
 					echo '<h2>Environment is production. Dummy data creation is disabled.</h2>';
 				}

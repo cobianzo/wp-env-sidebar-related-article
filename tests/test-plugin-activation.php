@@ -36,15 +36,15 @@ class PluginActivation extends WP_UnitTestCase {
 		$plugin_file = WP_PLUGIN_DIR . '/aside-related-article-block/aside-related-article-block.php';
 
 		// Ensure the plugin file exists.
-		$this->assertFileExists( $plugin_file, 'The main plugin file does not exist.' );
+		$this->assertFileExists( $plugin_file, 'FAIL 1.1. The main plugin file does not exist.' );
 
 		// Verify the plugin is active.
 		$this->assertTrue(
 				is_plugin_active( 'aside-related-article-block/aside-related-article-block.php' ),
-				'FAIL: The plugin did not activate correctly.'
+				'FAIL 1.1: The plugin did not activate correctly.' . PHP_EOL . '---------' . PHP_EOL
 			);
 
-		echo PHP_EOL . 'OK: Plugin activated correctly';
+		echo PHP_EOL . 'OK: Plugin activated correctly' . PHP_EOL . '---------' . PHP_EOL;
 
 	}
 
@@ -58,9 +58,9 @@ class PluginActivation extends WP_UnitTestCase {
 		// if `init` did not triggered by now, we would need (new Coco\Functions_Blocks())->register_blocks()
 		$this->assertTrue(
 			WP_Block_Type_Registry::get_instance()->is_registered( 'coco/aside-related-article' ),
-			'FAIL: Functions_Blocks doesnt register coco/aside-related-article.'
+			'FAIL 1.2: Functions_Blocks doesnt register coco/aside-related-article.'
 		);
 
-		echo PHP_EOL . 'OK: Functions_Blocks registers coco/aside-related-article.';
+		echo PHP_EOL . 'OK: Functions_Blocks registers coco/aside-related-article.' . PHP_EOL . '---------' . PHP_EOL;
 	}
 }

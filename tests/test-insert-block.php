@@ -17,7 +17,7 @@ class InsertBlockTest extends WP_UnitTestCase {
 		Create_Dummy_Data::create_dummy_posts( [ 'count' => 5, 'echo' => false ] );
 
 		// Create a test post.
-		$post_id = $factory->post->create([
+		$factory->post->create([
 			'post_title'   => 'Putin and Zelensky play chess in the Kremlin',
 			'post_name'    => 'post-container-block-test',
 			'post_content' => '',
@@ -66,16 +66,24 @@ class InsertBlockTest extends WP_UnitTestCase {
 			'post_content' => $updated_content,
 		]);
 
-		if (is_wp_error($result)) {
-				return $result;
+		if ( is_wp_error( $result ) ) {
+			$this->assertTrue(
+				false,
+				'FAIL 2.1: Could not update post ' . $post_id . '. Error: ' . $result->get_error_message()
+				. PHP_EOL . '---------' . PHP_EOL
+			);
+			return $result;
 		}
-		$post = get_post( $post_id );
+		$post = get_post( $result );
 		// Get the post content after update.
 		$content = $post->post_content;
 
 		// Check that the block is inserted correctly.
 		$this->assertStringContainsString( $block_name, $content, 'The block is not inserted correctly.' );
 		$this->assertStringContainsString( '"termID":' . $category_id, $content, 'The termID attribute does not match.' );
+
+		echo PHP_EOL . 'OK: block insterted correctly in post ' . $post->ID . ': ' . $post->post_title . PHP_EOL
+		. $content . PHP_EOL . '---------' . PHP_EOL;
 	}
 }
 
