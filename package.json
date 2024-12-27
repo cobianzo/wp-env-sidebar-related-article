@@ -27,7 +27,7 @@
 		"wp-env": "wp-env",
 		"wpcli": "wp-env run cli -- wp ",
 		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run test",
-		"test:php:watch": "wp-env run cli --env-cwd='wp-content/plugins/aside-related-article-block' composer run test:watch",
+		"test:php:watch": "wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run test:watch",
 		"test:php:setup": "wp-env start",
 		"test:js": "playwright test",
 		"prepare": "husky",
