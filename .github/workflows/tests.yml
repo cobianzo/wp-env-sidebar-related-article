@@ -64,7 +64,7 @@ jobs:
     - name: Activate Plugin (not needed)
       run: wp plugin activate aside-related-article-block --allow-root
 
-    - name: Install composer
+    - name: composer install
       run: |
         cd wp-content/plugins/aside-related-article-block
         composer install

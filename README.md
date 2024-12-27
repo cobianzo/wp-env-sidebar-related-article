@@ -132,6 +132,18 @@ check the 'readme-how-to-test.md'. You'll find tips about how to test. There is 
 
 will create `aside-related-article-block.zip` in the root folder
 
+# Troubles
+
+- sometimes the enviroment of wp-env gets crazy and tries to find the assets of the block in :
+http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/aside-related-article-block/build/blocks/aside-related-article/style-index.css?ver=1.0
+
+- Sometimes when creating the wp-env, the DB is not initialized. You can use wp cli to help
+```
+npx wp-env run cli wp db reset --yes
+npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi WPENV Site WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
+npx wp-env run cli -- wp plugin activate aside-related-article-block
+```
+
 # TODO
 
 - We need CI/CD (circle CI or git hooks)

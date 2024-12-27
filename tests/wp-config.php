@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This configuration is used only for the CI/CD in github (headless)
+ * This configuration is used only for the CI/CD in github (headless), or anywhere outside wp-env
  * When in local we run phpunit test inside the docker environment, using wp-env cli commands
  *
  * here we define the const that we need to load the wp installation that we have installed
@@ -38,12 +38,10 @@ define('WP_DEBUG', true);
 // These tests will DROP ALL TABLES in the database with the prefix named below.
 // DO NOT use a production database or one that is shared with something else.
 
-// define('DB_NAME', getenv('WP_DB_NAME') ?: 'wp_wordpress_test'); // tests-wordpress in wp-env
-define('DB_NAME', getenv('WP_DB_NAME') ?: 'tests-wordpress'); // tests-wordpress in wp-env
+define('DB_NAME', getenv('WP_DB_NAME') ?: 'wp_wordpress_test');
 define('DB_USER', getenv('WP_DB_USER') ?: 'root');
 define('DB_PASSWORD', getenv('WP_DB_PASS') ?: 'password');
-// define('DB_HOST', getenv('WP_DB_HOST') ?: 'localhost'); // localhost:49642 or the port assigned by docker
-define('DB_HOST', getenv('WP_DB_HOST') ?: 'localhost:49642'); // localhost:49642 or the port assigned by docker
+define('DB_HOST', getenv('WP_DB_HOST') ?: 'localhost');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
 
@@ -64,9 +62,14 @@ define('NONCE_SALT',       '|D;XUOhEJ/FsQJjwF6}S[.Di=`TksKSYVfsR`B@=gI^0):|n`q.G
 
 $table_prefix = 'wp_';   // Only numbers, letters, and underscores please!
 
-define('WP_TESTS_DOMAIN', 'example.org');
+define('WP_TESTS_DOMAIN', 'localhost.org'); // needs to be localhost so PHP unit knows it's in testing mode.
 define('WP_TESTS_EMAIL', 'admin@example.org');
 define('WP_TESTS_TITLE', 'Test Blog');
+
+// important. Tell phpUNIT that we are not in production.
+if ( ! defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+	define( 'WP_ENVIRONMENT_TYPE', 'development' ); // Options: 'development', 'staging', 'production'
+}
 
 define('WP_PHP_BINARY', 'php');
 
