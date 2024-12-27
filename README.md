@@ -132,6 +132,11 @@ check the 'readme-how-to-test.md'. You'll find tips about how to test. There is 
 
 will create `aside-related-article-block.zip` in the root folder
 
+# Troubles
+
+- sometimes the enviroment of wp-env gets crazy and tries to find the assets of the block in :
+http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/aside-related-article-block/build/blocks/aside-related-article/style-index.css?ver=1.0
+
 # TODO
 
 - We need CI/CD (circle CI or git hooks)

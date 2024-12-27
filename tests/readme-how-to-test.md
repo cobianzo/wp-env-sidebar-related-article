@@ -29,15 +29,28 @@ npx wp-env run tests-cli -- wp plugin activate aside-related-article-block
 
 # TEST SUITES in phpunit
 
-PHPUnit is not very useful in this project, but it has been set up and works.
-Initially I set it up loading it in wp-env environment: `"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/aside-related-article-block' composer run test",`
-
 We run it in two cases:
 - when developing in local (npm run test:php)
 - in git action when pushing to repo
 
-## PHPUnit in local
+PHPUnit is not very useful in this project, but it has been set up and works, even in the watching mode
+
+I suggest you run in watch mode (`npm run test:php:watch` which uses `composer run test:watch`).
+
+> **Important Note**: The phpUnit test is set differently when we work in wp-env development, from when we run the tests in github actions or anywhere outside wp-env. That is why
+`test/bootstrap.php` calls two different .php files, for different setups.
+
+## PHPUnit in wp-env docker development
+
+	- wp-env phpunit -> check `test:php` in `package.json`
+	- wp-env phpunit is ran with `npm run test:php`, which loads the command inside wp-env docker container.
+	- wp-env phpunit takes longer because we install WP every time we run it.
+	- wp-env apparently works better because when I'm outside it, I need to call `do_action('init')` for it to work
+
+	- The PHPUnit WATCH MODE works very well. It set ups wp differently, creates a different DB ... but it works
+	- I call it in composer setting a env var IS_WATCHING, to use the bootstrap.php for the wp-env envionrment.
 
 ## PHPUnit in git action (Github)
-- check the workflow test.yml. There I install a full wordpress with WP CLI, place the plugin by
+	- in github actions, check .github/workflows/tests.yml
+	- There I install a full wordpress with WP CLI, place the plugin by
 cloning the repo, and run `composer run test`, which uses

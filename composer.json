@@ -57,6 +57,6 @@
 			"rm -rf ~/.config/composer/cache"
 		],
 		"test": "phpunit",
-		"test:watch": "phpunit-watcher watch < /dev/tty"
+		"test:watch": "IS_WATCHING=true phpunit-watcher watch < /dev/tty"
 	}
 }

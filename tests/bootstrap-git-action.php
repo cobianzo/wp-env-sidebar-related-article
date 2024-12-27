@@ -1,18 +1,32 @@
 <?php
 /**
  * PHPUnit bootstrap file.
+ * This is the bootstrap setup for git actions,
+ * The difference with wp-env is that this one calls tests/wp-config.php to connect to the test DB,
+ * and uses the WP core files where this plugin is installed, under wp-content/plugins.
+ *
  *
  * @package Coco
  */
 
- // before starting, we should ahve called tests with the env variable:
-// :=> WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php
-// there
+/*
+Beware, $_ENV is not the same as getenv() when running outside wp-env
+	before starting, we should ahve called tests with the env variable:
+	:=> WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php
+*/
+
+
+if ( ! file_exists( getenv( 'WP_PHPUNIT__TESTS_CONFIG' ) ) ) {
+	echo PHP_EOL . 'In this setup of PHPUnit, we need the file wp-config.php in getenv "WP_PHPUNIT`__TESTS_CONFIG" '
+		. PHP_EOL . 'Try' . PHP_EOL .'WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test' . PHP_EOL;
+	exit;
+} else {
+	echo PHP_EOL . 'found ' . getenv('WP_PHPUNIT__TESTS_CONFIG') . PHP_EOL;
+}
 
 // wordpress for testing is installed with wp cli
 $_wp_unit_vendor = getenv( 'WP_PHPUNIT__DIR' ) ? getenv( 'WP_PHPUNIT__DIR' ) : 'vendor/wp-phpunit/wp-phpunit';
-$_wp_unit_vendor = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
-// die($_wp_unit_vendor);
+
 
 $_phpunit_polyfills_path = getenv( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' );
 $_phpunit_polyfills_path = empty( $_phpunit_polyfills_path ) ? 'vendor/yoast/phpunit-polyfills' : $_phpunit_polyfills_path;
