@@ -31,10 +31,10 @@ class Create_Dummy_Data {
 		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
 	}
 
-	public static function create_dummy_media() {
+	public static function create_dummy_media( $options = [ 'echo' => true ] ) {
 		// Create a dummy image attachment.
 		$upload_dir       = wp_upload_dir();
-		$image_url        = 'https://via.placeholder.com/300x150';
+		$image_url        = WP_PLUGIN_DIR . '/aside-related-article-block/tests/playwright/assets/featimage.gif';
 		$image_name       = 'dummy-image.jpg';
 		$image_slug       = sanitize_title( pathinfo( $image_name, PATHINFO_FILENAME ) );
 		$image_data       = file_get_contents( $image_url );
@@ -47,7 +47,7 @@ class Create_Dummy_Data {
 			'numberposts' => 1,
 		) );
 		if ( ! empty( $existing_attachment ) ) {
-			echo "<br/>Attachment $image_slug already exists";
+			echo $options['echo'] ?  "<br/>Attachment $image_slug already exists" : '';
 			return $existing_attachment[0]->ID;
 		}
 
@@ -80,30 +80,30 @@ class Create_Dummy_Data {
 		return $attach_id;
 	}
 
-	public static function create_dummy_terms() {
+	public static function create_dummy_terms( $options = [ 'echo' => true ] ) {
 		// Create a category called Politics if it doesn't exist.
 		if ( ! term_exists( 'Politics', 'category' ) ) {
-			echo '<br/>creating Politics cat';
+			echo $options['echo'] ? '<br/>creating Politics cat' : '';
 			wp_insert_term( 'Politics', 'category' );
 		} else {
-			echo '<br/>cat Politics exists';
+			echo $options['echo'] ? '<br/>cat Politics exists' : '';
 		}
 
 		// Create a tag called Barack Obama if it doesn't exist.
 		if ( ! term_exists( 'Barack Obama', 'post_tag' ) ) {
 			wp_insert_term( 'Barack Obama', 'post_tag' );
 		} else {
-			echo '<br/>tag barack-obama exists';
+			echo $options['echo'] ? '<br/>tag barack-obama exists' : '';
 		}
 	}
 	/**
 	 * Create dummy posts.
 	 *
-	 * @param int $count Number of posts to create.
+	 * @param int $options 'count' Number of posts to create.
 	 * @return void
 	 */
-	public static function create_dummy_posts( $count = 10, $attachment_id = 0 ) {
-		for ( $i = 0; $i < $count; $i++ ) {
+	public static function create_dummy_posts( $options = [ 'count' => 10, 'attachment_id' => 0, 'echo' => true ]  ) {
+		for ( $i = 0; $i < $options['count']; $i++ ) {
 			$post    = get_page_by_path( 'dummy-post-' . $i, OBJECT, 'post' );
 			$post_id = null;
 			if ( ! isset( $post->ID ) ) {
@@ -116,10 +116,12 @@ class Create_Dummy_Data {
 					'post_status'  => 'publish',
 					'post_author'  => 1,
 				) );
-				echo "<br/>Created post $i <a href='" . get_edit_post_link( $post_id ) . "' target='new'>" . get_the_title( $post_id ) . "</a>" ;
-			} else echo "<br> - Post $i exists ($post->ID)";
-			if ( $attachment_id && is_numeric( $post_id ) ) {
-				set_post_thumbnail( $post_id, $attachment_id );
+				echo $options['echo'] ?
+					"<br/>Created post $i <a href='" . get_edit_post_link( $post_id ) . "' target='new'>" . get_the_title( $post_id ) . "</a>"
+					: '';
+			} else echo $options['echo'] ? "<br> - Post $i exists ($post->ID)" : '';
+			if ( ! empty( $options['attachment_id'] ) && $options['attachment_id'] && is_numeric( $post_id ) ) {
+				set_post_thumbnail( $post_id, $options['attachment_id'] );
 			}
 		}
 	}
@@ -136,7 +138,7 @@ class Create_Dummy_Data {
 		}
 	}
 
-	public static function reset_dummy_data() {
+	public static function reset_dummy_data( $options = ['echo' => true ]) {
 		$all_posts = get_posts( array(
 			'post_type'      => 'post',
 			'post_status'    => 'any',
@@ -144,10 +146,10 @@ class Create_Dummy_Data {
 			'suppress_filters' => false,
 		) );
 		foreach ( $all_posts as $post ) {
-			echo "<br/><span style='color:#ee4455'>deleting $post->ID -> ($post->post_title)</span>";
+			echo $options['echo'] ? "<br/><span style='color:#ee4455'>deleting $post->ID -> ($post->post_title)</span>" : '';
 			wp_delete_post( $post->ID, true );
 		}
-		echo '<br/><hr/>';
+		echo $options['echo'] ? '<br/><hr/>' : '';
 	}
 
 	public static function add_admin_menu() {
@@ -171,7 +173,7 @@ class Create_Dummy_Data {
 					echo '<h3>Attempting to create dummy data</h3>';
 					$att_ID = Create_Dummy_Data::create_dummy_media();
 					Create_Dummy_Data::create_dummy_terms();
-					Create_Dummy_Data::create_dummy_posts( 5, $att_ID );
+					Create_Dummy_Data::create_dummy_posts( [ 'count' => 5, 'attachment_id' => $att_ID, 'echo' => true ] );
 
 					echo '<h2>Dummy Data Created</h2>';
 
@@ -188,7 +190,7 @@ class Create_Dummy_Data {
 					echo '<div style="display:flex; gap:1rem; border: 1px solid gray; padding: 1rem;">';
 					echo '<div class="column">';
 
-					echo '<h4>Attachments (' . count( $attachments ) . '):</h4>';
+					echo '<h3>Attachments (' . count( $attachments ) . '):</h3>';
 					echo '<ul>';
 					foreach ( $attachments as $attachment ) {
 						echo '<li>' . esc_html( $attachment->post_title ) . '<br>';
@@ -204,35 +206,36 @@ class Create_Dummy_Data {
 					echo '</div>';
 					echo '<div class="column">';
 
-					echo '<h4>Posts:</h4>';
+					echo '<h3>Posts:</h3>';
 					$posts = get_posts( array( 'numberposts' => -1 ) );
 					echo '<ul>';
-					foreach ( $posts as $post ) {
+
+					foreach ( $posts as $i => $post ) {
 						echo '<li><a class="test-post-link-' . esc_attr( $i ) . '" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '" target="new">' .
 							esc_html( $post->post_title ) .
-						'</a></li>';
+						'</a>&nbsp;&nbsp;<a href="'. get_permalink( $post->ID ).'" target="new"> 🔗 ' . esc_html( $post->ID ) . '</a> </li>';
 					}
 					echo '</ul>';
 
 					echo '</div>';
 					echo '<div class="column">';
 
-					echo '<h4>Terms:</h4>';
+					echo '<h3>Terms:</h3>';
 					$categories = get_categories( array( 'hide_empty' => false ) );
-					echo '<h5>Categories:</h5>';
-					echo '<ul>';
+					echo '<h4>Categories:</h4>';
+					echo '<ol>';
 					foreach ( $categories as $category ) {
 						echo '<li>' . esc_html( $category->name ) . '</li>';
 					}
-					echo '</ul>';
+					echo '</ol>';
 
 					$tags = get_tags( array( 'hide_empty' => false ) );
-					echo '<h5>Tags:</h5>';
-					echo '<ul>';
+					echo '<h4>Tags:</h4>';
+					echo '<ol>';
 					foreach ( $tags as $tag ) {
 						echo '<li>' . esc_html( $tag->name ) . '</li>';
 					}
-					echo '</ul>';
+					echo '</ol>';
 				} else {
 					echo '<h2>Environment is production. Dummy data creation is disabled.</h2>';
 				}
