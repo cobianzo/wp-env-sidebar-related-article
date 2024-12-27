@@ -10,7 +10,8 @@
  */
 class Test_Plugin_Activation extends WP_UnitTestCase {
 
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+	protected function setUp(): void {
+		parent::setUp();
 
 		echo PHP_EOL . PHP_EOL . 'TEST 1' . PHP_EOL . '=========' . PHP_EOL ;
 
