@@ -25,6 +25,10 @@
 		"postID": {
 			"type": "number",
 			"default": 0
+		},
+		"align": {
+			"type": "string",
+			"default": "right"
 		}
 	},
 	"example": {
@@ -34,5 +38,7 @@
 	},
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php",
-	"style": "file:./style-index.css"
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewStyle": "file:./view-index.css"
 }

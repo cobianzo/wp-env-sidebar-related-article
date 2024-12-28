@@ -2,6 +2,25 @@
 
 # Playwright E2E
 
+# troubleshooting (problems that I found when using e2e testing):
+
+- **IMPORTANT**: in real development I had to reset the db myself several times with wp cli, with this:
+
+```
+
+npx wp-env run tests-cli wp db reset --yes
+npx wp-env run tests-cli wp core install --url="http://localhost:8891" --title="Mi Test Site WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
+npx wp-env run tests-cli -- wp plugin activate aside-related-article-block
+
+```
+
+- If, when running your test, you see `Failed to load resource: ...` in the results, it means that - sometimes the enviroment of wp-env gets crazy and tries to find the assets of the block in :
+http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/aside-related-article-block/build/blocks/aside-related-article/style-index.css?ver=1.0
+	- I still don't know why it happens and how to fix it. I restart docker and push the env up again to fix it.
+
+- In my computer, sometimes I run out of memory creating dummy data by hand
+	- So I created a page that, when visited, creates everything (only if it was not created before) -  tests/class-create-dummy-data.php.
+
 ## Tips
 - aside-related-article-block.spec.js is the only test made so far.
 - We use the @wordpress/e2e-test-utils-playwright and we try to use its functions
@@ -9,17 +28,7 @@
 	- I suggest you download the repo and ur Cmd + F to find stuff
 - The testing env is the one of wp-env, in this project http://localhost:8891 (.wp.env.json)
 	- we set it in playwright.config.js
-- If we need to reset the test DB:
 
-**IMPORTANT**: in real development I had to run this several times.
-```
-npx wp-env run tests-cli wp db reset --yes
-npx wp-env run tests-cli wp core install --url="http://localhost:8891" --title="Mi Test Site WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
-npx wp-env run tests-cli -- wp plugin activate aside-related-article-block
-```
-
-- In my computer, sometimes I run out of memory creating dummy data by hand
-	- So I created a page that, when visited, creates everything (only if it was not created before) -  tests/class-create-dummy-data.php.
 - I suggest to use the extension for playwright tests of VS Code
 	- It shws the error in the editor, and allows you to record actions.
 - and also the UI of playwright

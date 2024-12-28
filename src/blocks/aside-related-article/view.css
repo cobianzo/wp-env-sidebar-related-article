@@ -1,0 +1,36 @@
+/*
+	Only frontend
+*/
+.wp-block-coco-aside-related-article.is-frontend {
+
+	/* There are no links in the editor, only frontend */
+	a {
+		text-decoration: none;
+		display: flex;
+		flex-direction: column;
+
+		img {
+			filter: brightness(0.8) contrast(1.2);
+			transition: filter 0.5s ease-in-out;
+		}
+
+		.coco-related-article {
+			transition: border 0.5s ease-in-out;
+		}
+
+		&:hover {
+
+			img {
+				filter: none;
+			}
+
+			.coco-related-article {
+				border-color: var(--coco-related-article-accent);
+			}
+
+			h2 {
+				text-decoration: underline;;
+			}
+		}
+	}
+}

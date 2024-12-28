@@ -12,44 +12,17 @@
  * @package aside-related-article-block
  */
 
-use Coco\Various;
-
 // Prepare the extra query params for the the WP Query to get the related article
-$attributes = empty( $attributes ) ? [] : $attributes;
-$query_args = [];
-$source     = isset( $attributes['source'] ) ? $attributes['source'] : null;
-if ( 'postID' === $source ) {
-	if ( isset( $attributes['postID'] ) && $attributes['postID'] ) {
-		$query_args['p'] = $attributes['postID'];
-	} else {
-			echo wp_kses_post( Various::msg_editor_only( 'Select a post in the dropdown.' ) );
-			return;
-	}
-} elseif ( 'category' === $source ) {
-	if ( isset( $attributes['termID'] ) && $attributes['termID'] ) {
-		$query_args['cat'] = $attributes['termID'];
-	} else {
-		echo wp_kses_post( Various::msg_editor_only( 'Select a category in the dropdown. <br/> The dropdown will allow to select only categories included in the current post' ) );
-		return;
-	}
-} elseif ( 'post_tag' === $source ) {
-	if ( isset( $attributes['termID'] ) && $attributes['termID'] ) {
-		$query_args['tag_id'] = $attributes['termID'];
-	} else {
-		echo wp_kses_post( Various::msg_editor_only( 'Select a tag in the dropdown. <br/> The dropdown will allow to select only tags included in the current post' ) );
-		return;
-	}
-}
+$attributes = isset( $attributes ) ? $attributes : [];
+$_source    = $attributes['source'] ?? null;
+$_post_id   = $attributes['postID'] ?? null;
+$_term_id   = $attributes['termID'] ?? null;
 
-// more validation.
-if ( empty( $source ) ) {
-	echo wp_kses_post( Various::msg_editor_only( 'Please select a source' ) );
-	return;
-}
+$query_args = [];
 
 // extra vars we'll need later
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$is_in_editor   = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( $_GET['context'] );
+$is_in_editor   = isset( $_GET['context'] ) && 'edit' === sanitize_text_field( wp_unslash( $_GET['context'] ) );
 $parent_post_id = get_the_ID();
 
 // in production we don't want old posts. In dev we need a larger range 'cause data is more static.
@@ -68,58 +41,56 @@ $query_args = array_merge( array(
 	'order'                  => 'desc',
 	// Add a date filter to taxonomy queries
 	'date_query'             => array( 'after' => "-$days_range days at midnight" ),
+	// The params set up as block attributes
+	'p'                      => 'postID' === $_source && $_post_id ? $_post_id : null,
+	'cat'                    => 'category' === $_source && $_term_id ? $_term_id : null,
+	'tag'                    => 'post_tag' === $_source && $_term_id ? $_term_id : null,
 ), $query_args );
 
 $query = new \WP_Query( $query_args );
 
 // Found no posts; exit
 if ( ! $query->have_posts() ) {
-	echo wp_kses_post( Various::msg_editor_only( 'Sorry. There are no posts' ) );
 	return;
 }
 
 $the_post = $query->posts[0];
+// the found post is the same as the post where we are, so we take the second one.
 if ( isset( $the_post->ID ) && $the_post->ID === $parent_post_id ) {
 	if ( ! isset( $query->posts[1] ) ) {
-		echo wp_kses_post( Various::msg_editor_only( 'Sorry. The related article can\'t be the same as the post container' ) );
 		return;
 	}
 	$the_post = $query->posts[1];
 }
 
 if ( ! isset( $the_post->ID ) ) {
-	echo wp_kses_post( Various::msg_editor_only( 'Error in the Post retrieved, Could resolve its ID' ) );
 	return;
 }
 
 // if the source is category, get info about it.
-$cat_title = '';
+$main_category = null;
 if ( isset( $query_args['cat'] ) ) {
 	$main_category = get_term( $query_args['cat'] );
-	if ( isset( $main_category->name ) ) {
-		$cat_title = $main_category->name;
-	}
-}
-if ( empty( $cat_title ) ) {
+} else {
 	$categories = get_the_category( $the_post->ID );
 	if ( ! empty( $categories ) ) {
 		$main_category = $categories[0];
-		$cat_title     = ! empty( $main_category->name ) ? $main_category->name : $cat_title;
 	}
 }
+$cat_title = ! empty( $main_category->name ) ? $main_category->name : '';
 
 // The variables for the view.
 $image_id  = get_post_thumbnail_id( $the_post->ID );
 $image_src = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
 $image_src = apply_filters( 'coco_relatedarticle_image_src', $image_src, $the_post, $parent_post_id );
 
-$header         = __( 'Related Article', 'coco' );
+$header         = __( 'Related Article', 'aside-related-article-block' );
 $header         = apply_filters( 'coco_relatedarticle_header', $header, $the_post, $parent_post_id );
-$href           = ! $is_in_editor ? ' href="' . get_permalink( $the_post ) . '" ' : '';
+$href           = ' href="' . get_permalink( $the_post ) . '" ';
 $headline       = get_the_title( $the_post );
 $pre_headline   = '<span>⦿</span>'; // use an svg better
 $pre_headline   = apply_filters( 'coco_relatedarticle_pre_headline', $pre_headline, $the_post, $parent_post_id );
-$read_more_text = apply_filters( 'coco_relatedarticle_header', __( 'read more', 'coco' ), $the_post, $parent_post_id );
+$read_more_text = apply_filters( 'coco_relatedarticle_read_more', __( 'read more', 'aside-related-article-block' ), $the_post, $parent_post_id );
 $the_excerpt    = wp_trim_words( get_the_excerpt( $the_post ), 20, '...' );
 $the_excerpt    = apply_filters( 'coco_relatedarticle_excerpt', $the_excerpt, $the_post, $parent_post_id );
 
@@ -134,7 +105,7 @@ $the_excerpt    = apply_filters( 'coco_relatedarticle_excerpt', $the_excerpt, $t
 
 if ( ! $is_in_editor ) :
 	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-	<div <?php echo get_block_wrapper_attributes( [ 'class' => ' alignleft is-frontend' ] ); ?>>
+	<div <?php echo get_block_wrapper_attributes( [ 'class' => 'is-frontend' ] ); ?>>
 		<a class="link-wrapper-frontend" <?php echo wp_kses( $href, [ 'href' => [] ] ); ?> title="<?php echo esc_attr( $headline ); ?>">
 
 	<?php

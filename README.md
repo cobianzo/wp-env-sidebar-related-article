@@ -32,6 +32,7 @@ WordPress test site started at http://localhost:8891
 MySQL is listening on port 49313
 MySQL for automated testing is listening on port 49412
 ```
+If the 5mins WordPress installation is triggered, see below **Troubles**.
 
 Inside the docker container the MySQL ports are the regular 3306 and 3307 for testing. They are just mapped out.
 
@@ -143,6 +144,7 @@ http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/
 ```
 npx wp-env run cli wp db reset --yes
 npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi Sitio WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
+npx wp-env run cli wp plugin activate aside-related-article-block
 ```
 
 # TODO

@@ -18,7 +18,6 @@ class Plugin_Setup {
 	 */
 	public static function init(): void {
 		// includes
-		require_once __DIR__ . '/class-various.php'; // Helpers
 		require_once __DIR__ . '/class-functions-blocks.php'; // regular gutenberg blocks
 
 		// When running Playwright tests, we want to create dummy data quickly with this new page
