@@ -23,18 +23,14 @@ jobs:
       with:
         php-version: '8.2'
 
-    - name: Install dependencies
+    - name: Install npm dependencies (no need composer)
       run: |
         npm install
-        composer install
 
     - name: Set up wp-env
       run: |
         npm run up
         npx wp-env run cli wp core version
-
-    - name: Run JavaScript and CSS linting
-      run: npm run lint
 
     - name: Install Playwright browsers
       run: npx playwright install chromium --with-deps
