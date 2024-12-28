@@ -33,9 +33,6 @@ MySQL is listening on port 49313
 MySQL for automated testing is listening on port 49412
 ```
 
-Sometimes the installation didn't work ok and I had to run
-`npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi Sitio WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"`
-
 Inside the docker container the MySQL ports are the regular 3306 and 3307 for testing. They are just mapped out.
 
 the password for MySQL inside the wp-env docker container is 'password', for the user 'root'
@@ -108,6 +105,8 @@ phpcs, phpcbf, eslint, stylelint, prettier
 
 # PHPUNIT
 
+- read `tests/readme-how-to-text.md`
+
 it works, I copied it from the create-block-theme plugin, with some adaptations because this is a theme not a plugin. The file `bin/install-wp-tests.sh` is not used.
 
 It's not really needed for this simple plugin, where there are no php functionalities or APIs on itself. You can run it individually or with watch
@@ -117,6 +116,8 @@ It's not really needed for this simple plugin, where there are no php functional
 `npm run test:php:watch`
 
 # Playwright e2e tests
+
+- read `tests/readme-how-to-text.md`
 
 check the 'readme-how-to-test.md'. You'll find tips about how to test. There is an e2e test with dummy data.
 
@@ -136,12 +137,12 @@ will create `aside-related-article-block.zip` in the root folder
 
 - sometimes the enviroment of wp-env gets crazy and tries to find the assets of the block in :
 http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/aside-related-article-block/build/blocks/aside-related-article/style-index.css?ver=1.0
+	- I still don't know why it happens and how to fix it. I restart docker and push the env up again to fix it.
 
 - Sometimes when creating the wp-env, the DB is not initialized. You can use wp cli to help
 ```
 npx wp-env run cli wp db reset --yes
-npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi WPENV Site WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
-npx wp-env run cli -- wp plugin activate aside-related-article-block
+npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi Sitio WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
 ```
 
 # TODO
