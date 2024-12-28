@@ -100,9 +100,10 @@ class Create_Dummy_Data {
 	 * Create dummy posts.
 	 *
 	 * @param int $options 'count' Number of posts to create.
-	 * @return void
+	 * @return array
 	 */
 	public static function create_dummy_posts( $options = [ 'count' => 10, 'attachment_id' => 0, 'echo' => true ]  ) {
+		$post_created = [];
 		for ( $i = 0; $i < $options['count']; $i++ ) {
 			$post    = get_page_by_path( 'dummy-post-' . $i, OBJECT, 'post' );
 			$post_id = null;
@@ -119,11 +120,13 @@ class Create_Dummy_Data {
 				echo $options['echo'] ?
 					"<br/>Created post $i <a href='" . get_edit_post_link( $post_id ) . "' target='new'>" . get_the_title( $post_id ) . "</a>"
 					: '';
+				$post_created[] = $post_id;
 			} else echo $options['echo'] ? "<br> - Post $i exists ($post->ID)" : '';
 			if ( ! empty( $options['attachment_id'] ) && $options['attachment_id'] && is_numeric( $post_id ) ) {
 				set_post_thumbnail( $post_id, $options['attachment_id'] );
 			}
 		}
+		return $post_created;
 	}
 
 	/**
@@ -173,7 +176,13 @@ class Create_Dummy_Data {
 					echo '<h3>Attempting to create dummy data</h3>';
 					$att_ID = Create_Dummy_Data::create_dummy_media();
 					Create_Dummy_Data::create_dummy_terms();
-					Create_Dummy_Data::create_dummy_posts( [ 'count' => 5, 'attachment_id' => $att_ID, 'echo' => true ] );
+					$pc = Create_Dummy_Data::create_dummy_posts( [ 'count' => 5, 'attachment_id' => $att_ID, 'echo' => true ] );
+					$cat = get_term_by( 'name', 'Politics', 'category' );
+					foreach ( $pc as $iteration => $postid ) {
+						if ( $iteration <= 1 ) {
+							wp_set_post_categories( $postid, array( $cat->term_id ) );
+						}
+					}
 
 					echo '<h2>Dummy Data Created</h2>';
 
@@ -211,9 +220,13 @@ class Create_Dummy_Data {
 					echo '<ul>';
 
 					foreach ( $posts as $i => $post ) {
+						$categories = get_the_category( $post->ID );
+						$cat_string = array_reduce( $categories, fn($carry, $cat) => ($carry ? "$carry ," : '') . $cat->name . ', ', '' );
 						echo '<li><a class="test-post-link-' . esc_attr( $i ) . '" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '" target="new">' .
 							esc_html( $post->post_title ) .
-						'</a>&nbsp;&nbsp;<a href="'. get_permalink( $post->ID ).'" target="new"> 🔗 ' . esc_html( $post->ID ) . '</a> </li>';
+							'</a>&nbsp;&nbsp;<a href="'. get_permalink( $post->ID ).'" target="new"> 🔗 ' . esc_html( $post->ID ) . '</a>' .
+							"<br/> $cat_string" .
+							'</li>';
 					}
 					echo '</ul>';
 

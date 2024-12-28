@@ -47,33 +47,32 @@ test.describe('Aside Related Article Block - E2E Tests', () => {
 		const CAT_NAME = 'Politics'; // the category must exist, I created with class-create-dummy-data.php
 		console.log('>>>>>>> Start Single test for cat ', CAT_NAME);
 
-		// 1) Open first post
+		// 1) Filter list of posts by cat Politics
 		await page.getByRole('link', { name: 'Posts', exact: true }).click();
+		await page.getByRole('link', { name: 'Politics', exact: true }).first().click();
+		const postsListedPoliticsURL = await page.url();
+
+		// 2) Open first post
 		const firstPost = await page.locator('a.row-title').first();
 		await firstPost.click();
-		// avoid showing the Welcome guide
-		await editor.setPreferences('core/edit-post', {
-			welcomeGuide: false,
-			fullscreenMode: false,
-		});
-		const welcomeCloseButton = page.getByLabel('Close', { exact: true });
-		if (await welcomeCloseButton.isVisible()) {
-			await welcomeCloseButton.click();
+
+		await page.waitForTimeout(3000);
+		const welcomeImage = await page.locator(`div[aria-label="Welcome to the block editor"]`);
+		if (await welcomeImage.isVisible()) {
+			console.log('>>>>>>> Welcome wizard is visible');
+			await page.getByLabel('Close', { exact: true }).click();
+		} else {
+			console.log('>>>>>>> no Welcome guide');
 		}
+
 		await editor.canvas.locator('[aria-label="Add title"]').fill('Barack Obama writes a new book');
-		// Open panel categories if not open
-		await openCategoriesPanelIfClosed({ page });
-		// assign cat Politics ans save
-		await page.getByLabel(CAT_NAME).check();
+		// await openCategoriesPanelIfClosed({ page });
 		await page.getByRole('button', { name: 'Save', exact: true }).click();
 
 		// 2) Open second post
-		await page.getByRole('link', { name: 'All Posts' }).click();
+		await page.goto(postsListedPoliticsURL);
 		const secondPost = await page.locator('a.row-title').nth(1);
 		await secondPost.click();
-
-		// assing cat Politics too
-		await page.getByLabel(CAT_NAME).check();
 
 		// insert the block, check and save
 		const paragraphInEditor = editor.canvas.locator('p').nth(0);
@@ -90,20 +89,22 @@ test.describe('Aside Related Article Block - E2E Tests', () => {
 		// edit attributes block
 		await page.getByRole('tab', { name: 'Block', exact: true }).click();
 		await page.getByLabel('Category', { exact: true }).check();
+		await page.waitForTimeout(2000);
 		const catsDropdownTextContent = await page
 			.locator('.components-panel__body.is-opened #inspector-select-control-0')
 			.textContent();
 		console.log('Text Content:', catsDropdownTextContent);
 		await expect(catsDropdownTextContent).toContain(CAT_NAME);
-		await page.getByLabel('Select a Category or Tag').selectOption('2');
+		await page.getByLabel('Select a Category or Tag').selectOption({ label: 'Politics' });
 		// await page.getByLabel('Select a Category or Tag').selectOption({ index: 1 });
 		await page.getByRole('button', { name: 'Save', exact: true }).click();
 		await expect(editor.canvas.locator('[aria-label="Block: Aside Related Article"]')).toBeVisible();
 
 		// Check the frontend
-		await expect(page.getByLabel('View Post')).toBeVisible();
+		const viewPostElement = await page.getByRole('link', { name: 'View Post', exact: true }).first();
+		await expect(viewPostElement).toBeVisible();
 		const page2Promise = page.waitForEvent('popup');
-		await page.getByLabel('View Post').click();
+		await viewPostElement.click();
 		const page2 = await page2Promise;
 		await expect(page2.getByRole('link', { name: 'Related Article Politics ⦿' })).toBeVisible();
 

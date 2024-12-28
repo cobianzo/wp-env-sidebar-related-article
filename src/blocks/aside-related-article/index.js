@@ -14,7 +14,7 @@ registerBlockType('coco/aside-related-article', {
 	edit: (props) => (
 		<>
 			<Controls {...props} />
-			<div {...useBlockProps({ className: 'alignleft is-editor' })}>
+			<div {...useBlockProps({ className: 'is-editor' })}>
 				<ServerSideRender
 					block="coco/aside-related-article"
 					attributes={{
