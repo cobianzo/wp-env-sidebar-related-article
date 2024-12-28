@@ -15,6 +15,7 @@
 	"attributes": {
 		"source": {
 			"type": "string",
+			"enum": ["category", "post_tag", "postID"],
 			"default": "category"
 		},
 		"termID": {
@@ -28,7 +29,6 @@
 	},
 	"example": {
 		"attributes": {
-			"source": "category",
 			"termID": 1
 		}
 	},
