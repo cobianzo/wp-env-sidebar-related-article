@@ -16,7 +16,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0.40
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: wp_wordpress_test
@@ -58,7 +58,7 @@ jobs:
     - name: Build bundles of the plugin
       run: |
         cd wp-content/plugins/aside-related-article-block
-        npm install
+        npm ci
         npm run build
 
     - name: Activate Plugin (not needed)

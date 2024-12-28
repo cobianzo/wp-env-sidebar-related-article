@@ -16,7 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$is_local = str_contains( get_option( 'siteurl' ), 'localhost' );
-define( 'DUMMY_DATA_GENERATOR', $is_local );
+$is_local      = str_contains( get_option( 'siteurl' ), 'localhost' ) || str_contains( get_option( 'siteurl' ), '127.0.0.1' );
+$is_production = defined( 'WP_ENVIRONMENT_TYPE' ) && 'production' === WP_ENVIRONMENT_TYPE;
+define( 'DUMMY_DATA_GENERATOR', $is_local || ! $is_production );
 
 require_once plugin_dir_path( __FILE__ ) . 'class-plugin-setup.php';

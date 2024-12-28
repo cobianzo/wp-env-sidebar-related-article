@@ -25,8 +25,9 @@ export default defineConfig({
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		/* Base URL to use in actions like `await page.goto('/')`. */
-		baseURL: 'http://localhost:8891',
-		command: 'wp-env start',
+		baseURL: process.env.BASE_URL || 'http://localhost:8891',
+		browserName: process.env.BROWSER || 'chromium', // Usa la variable de entorno BROWSER o 'chromium'
+		headless: process.env.HEADLESS !== 'false', // Usa la variable HEADLESS (true por defecto)
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
 		trace: 'on-first-retry',
 		viewport: { width: 1280, height: 800 },
