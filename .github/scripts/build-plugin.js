@@ -2,6 +2,8 @@
 // it doesnt include src and doesnt use my readme-plugin.md renamed into readme.md
 // so I create my own
 
+// Usage: node .github/scripts/build-plugin.js
+
 const fs = require('fs');
 const archiver = require('archiver');
 

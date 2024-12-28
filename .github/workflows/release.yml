@@ -3,9 +3,7 @@ name: Build Plugin ZIP
 on:
     push:
         branches:
-            - develop
-            - main
-
+          -deactivated-add-here-main-and-develop
 jobs:
     bump-version:
         runs-on: ubuntu-latest
@@ -72,3 +70,4 @@ jobs:
             #       tag_name: ${{ needs.bump-version.outputs.new_version }}
             #       files: |
             #           aside-related-article-block.zip
+

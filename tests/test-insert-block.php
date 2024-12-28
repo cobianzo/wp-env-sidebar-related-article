@@ -109,6 +109,7 @@ class InsertBlockTest extends WP_UnitTestCase {
 
 		// Now veryfy the frontend: does the block renders correct HTML?
 		$render = render_block( $block );
+		$this->assertNotEmpty($render, '❌ FAIL 2.1 Block Render didnt work. Probably the block is not registered. Check the Network tab for the built js file..');
 		$this->assertStringContainsString( 'Politics', $render, '❌ FAIL 2.1 Block Render should contain the text "Politics", as it is the category assigned' );
 
 		echo PHP_EOL . '✅ OK 2.1: block insterted correctly in post ' . $post->ID . ': ' . $post->post_title . PHP_EOL

@@ -131,7 +131,7 @@ check the 'readme-how-to-test.md'. You'll find tips about how to test. There is 
 
 `node .github/scripts/build-plugin.js`
 
-will create `aside-related-article-block.zip` in the root folder
+will create `aside-related-article-block.zip` in the root folder, ready for distribution
 
 # Troubles
 
