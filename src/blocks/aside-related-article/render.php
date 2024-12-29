@@ -44,8 +44,9 @@ $query_args = array_merge( array(
 	// The params set up as block attributes
 	'p'                      => 'postID' === $_source && $_post_id ? $_post_id : null,
 	'cat'                    => 'category' === $_source && $_term_id ? $_term_id : null,
-	'tag'                    => 'post_tag' === $_source && $_term_id ? $_term_id : null,
+	'tag_id'                 => 'post_tag' === $_source && $_term_id ? $_term_id : null,
 ), $query_args );
+
 
 $query = new \WP_Query( $query_args );
 
