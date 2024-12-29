@@ -178,9 +178,11 @@ class Create_Dummy_Data {
 					Create_Dummy_Data::create_dummy_terms();
 					$pc = Create_Dummy_Data::create_dummy_posts( [ 'count' => 5, 'attachment_id' => $att_ID, 'echo' => true ] );
 					$cat = get_term_by( 'name', 'Politics', 'category' );
+					$tag = get_term_by( 'name', 'Barack Obama', 'post_tag' );
 					foreach ( $pc as $iteration => $postid ) {
 						if ( $iteration <= 1 ) {
 							wp_set_post_categories( $postid, array( $cat->term_id ) );
+							wp_set_post_tags( $postid, array( $tag->term_id ) );
 						}
 					}
 
@@ -220,12 +222,13 @@ class Create_Dummy_Data {
 					echo '<ul>';
 
 					foreach ( $posts as $i => $post ) {
-						$categories = get_the_category( $post->ID );
-						$cat_string = array_reduce( $categories, fn($carry, $cat) => ($carry ? "$carry ," : '') . $cat->name . ', ', '' );
+						$categories = get_the_category_list( ', ', '', $post->ID );
+						$tags = get_the_tag_list( '', ', ', '', $post->ID );
+						// $cat_string = array_reduce( $categories, fn($carry, $cat) => ($carry ? "$carry ," : '') . $cat->name . ', ', '' );
 						echo '<li><a class="test-post-link-' . esc_attr( $i ) . '" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '" target="new">' .
 							esc_html( $post->post_title ) .
 							'</a>&nbsp;&nbsp;<a href="'. get_permalink( $post->ID ).'" target="new"> 🔗 ' . esc_html( $post->ID ) . '</a>' .
-							"<br/> $cat_string" .
+							"<br/> &nbsp;&nbsp;$categories <br/> &nbsp;&nbsp;$tags" .
 							'</li>';
 					}
 					echo '</ul>';

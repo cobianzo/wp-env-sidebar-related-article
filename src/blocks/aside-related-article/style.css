@@ -17,82 +17,13 @@ div.wp-block-coco-aside-related-article {
 }
 
 /*
-	Only in the editor
-*/
-.wp-block-coco-aside-related-article.is-editor {
-
-	* {
-		pointer-events: none;
-	}
-
-	.notice {
-		padding: 1rem;
-		border: 1px solid #000;
-		color: var(--coco-related-article-muted, #111);
-	}
-
-	&:hover {
-		box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-	}
-}
-
-/*
-	Only frontend
-*/
-.wp-block-coco-aside-related-article.is-frontend {
-
-	/* There are no links in the editor, only frontend */
-	a {
-		text-decoration: none;
-		display: flex;
-		flex-direction: column;
-
-		img {
-			filter: brightness(0.8) contrast(1.2);
-			transition: filter 0.5s ease-in-out;
-		}
-
-		.coco-related-article {
-			transition: border 0.5s ease-in-out;
-		}
-
-		&:hover {
-
-			img {
-				filter: none;
-			}
-
-			.coco-related-article {
-				border-color: var(--coco-related-article-accent);
-			}
-
-			h2 {
-				text-decoration: underline;;
-			}
-		}
-	}
-}
-
-/*
 	Both editor and frontend
 */
 .wp-block-coco-aside-related-article {
 
-	/* the inner div that I could not remove in the editor */
-
-	> div, /* stylelint-disable-next-line no-descending-specificity */
-	> a {
-		display: flex;
-	}
-
-	/* IMPORTANT: this is what makes it inline */
-	display: inline-flex;
-	float: left;
-	flex-direction: column;
 	width: calc(var(--wp--style--global--content-size) / 2 - 3rem);
 	max-width: 40vw;
 	margin: 0;
-	margin-right: 1rem;
 
 	/*
 	 - Now the aestethics of the block itself:

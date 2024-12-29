@@ -25,12 +25,13 @@ class Functions_Blocks {
 	 */
 	public function register_blocks(): void {
 
+		$build_base_dir = dirname( __DIR__ ) . '/build/blocks/';
 		// Register custom blocks here
-		if ( file_exists( __DIR__ . '/build/blocks/' ) ) {
-			$block_json_files = glob( __DIR__ . '/build/blocks/*/block.json' );
+		if ( file_exists( $build_base_dir ) ) {
+			$block_json_files = glob( $build_base_dir . '*/block.json' );
 
 			if ( false === $block_json_files ) {
-				wp_die( 'error scanning folder ' . __DIR__ . '/build/blocks/*/block.json' );
+				wp_die( 'error scanning folder ' . esc_html( $build_base_dir ) . '*/block.json' );
 			}
 
 			// auto register all blocks that were found.

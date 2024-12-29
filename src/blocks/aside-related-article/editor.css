@@ -1,0 +1,29 @@
+/*
+	Only in the editor. Check also style.css
+*/
+.wp-block-coco-aside-related-article.is-editor {
+
+	/* in editor the block is just a preview, nothing should be interactive */
+	* {
+		pointer-events: none;
+	}
+
+	/* when the related article is not yet selected and there is a message instead */
+	.notice {
+		padding: 1rem;
+		border: 1px solid #000;
+		color: var(--coco-related-article-muted, #111);
+		min-height: 250px;;
+	}
+
+	/* animation on hover to help the user to pick up the block in the editor */
+	&:hover {
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+	}
+
+	/* when there is a message of empty block written by GB is because no posts are found. */
+	/* stylelint-disable-next-line selector-class-pattern */
+	.components-placeholder__fieldset::after {
+		content: 'There is no related article corresponding to your options criteria. Nothing will be shown inthe front end.';
+	}
+}

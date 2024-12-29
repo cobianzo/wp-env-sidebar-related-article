@@ -18,12 +18,11 @@ class Plugin_Setup {
 	 */
 	public static function init(): void {
 		// includes
-		require_once __DIR__ . '/inc/class-various.php'; // Helpers
 		require_once __DIR__ . '/class-functions-blocks.php'; // regular gutenberg blocks
 
 		// When running Playwright tests, we want to create dummy data quickly with this new page
 		if ( 'production' !== wp_get_environment_type() && defined( 'DUMMY_DATA_GENERATOR' ) && DUMMY_DATA_GENERATOR ) {
-			require_once __DIR__ . '/tests/class-create-dummy-data.php'; // Create Dummy Data Page
+			require_once dirname( __DIR__ ) . '/tests/class-create-dummy-data.php'; // Create Dummy Data Page
 		}
 
 		// Gutenberg related
