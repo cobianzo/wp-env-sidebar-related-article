@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Aside Related Article Block
  * Description: A custom block for displaying a "Related Article" widget, and it will be displayed inline on the left or right of the content
- * Version: 1.15.0
+ * Version: 1.16.0
  * Author: @cobianzo
  * Plugin URI: https://github.com/cobianzo/wp-env-sidebar-related-article
  * Author URI: https://cobianzo.com
