@@ -149,11 +149,9 @@ npx wp-env run cli wp plugin activate aside-related-article-block
 
 # TODO
 
-- We need CI/CD (circle CI or git hooks)
+- We need CI/CD for Playwright
 - Refactor to typescript
 - Transform most of the styles in the css into json styles, with variations.
-- Create a version bump script
-- Create the script to publish the plugin. Run it every time 'main' branch is updated.
-- Create screenshots and a video demo and upload it to my website
 - Extend the tests for mobile devices and for other wordpress versions/themes
-- Localization
+- Localization (translation)
+- Add more options to the plugin: hide excerpt, allo edit the header and the read more ...

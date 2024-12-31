@@ -1,6 +1,6 @@
 # Aside Related Article Block
 
-Stable tag: 1.1.15  
+Stable tag: 1.1.16  
 Tags: Related Article, recirc widget, block, floated block  
 Tested up to: 6.7  
 License: GPLv2 or later  
@@ -80,5 +80,5 @@ the related article, and the most recent one will be selected.
 ### 1.0.0
 - Initial release of the Aside Related Article Block.
 
-### 1.1.15
+### 1.1.16
 - Improvement in the style, and tweaks to make the plugin publisheable
