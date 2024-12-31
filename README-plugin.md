@@ -1,6 +1,6 @@
 # Aside Related Article Block
 
-Stable tag: 1.1.16  
+Stable tag: 1.15.0  
 Tags: Related Article, recirc widget, block, floated block  
 Tested up to: 6.7  
 License: GPLv2 or later  

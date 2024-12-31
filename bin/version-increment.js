@@ -16,12 +16,13 @@ const FILES = {
  * @param {string} filePath       - Path to the file.
  * @param {string} currentVersion - Current version to replace.
  * @param {string} newVersion     - New version to insert.
+ * @param {boolean} [silent=false] - If true, the function will not log anything to the console.
  */
-function updateFileVersion(filePath, currentVersion, newVersion) {
+function updateFileVersion(filePath, currentVersion, newVersion, silent = false) {
 	const content = fs.readFileSync(filePath, 'utf-8');
-	const updatedContent = content.replace(new RegExp(currentVersion, 'g'), newVersion);
+	const updatedContent = content.replace(currentVersion, newVersion, { flags: 'i' });
 	fs.writeFileSync(filePath, updatedContent, 'utf-8');
-	console.log(`Updated version in ${filePath}`);
+	if (!silent) console.log(`Updated version in ${filePath}`);
 }
 
 /**
@@ -41,28 +42,37 @@ function extractVersion(filePath) {
 /**
  * Main function to handle the version update.
  * @param {string} incrementType - Type of version increment (patch, minor, major).
+ * @param {boolean} [silent=false] - If true, the function will not log anything to the console.
  */
-function updateVersion(incrementType = 'patch') {
+function updateVersion(incrementType = 'patch', silent = false) {
 	try {
-		console.log(`Reading current version from ${FILES.pluginPHP}`);
+		if (!silent) {
+			console.log(`Reading current version from ${FILES.pluginPHP}`);
+		}
 
 		// Extract the current version from plugin.php (source of truth)
 		const currentVersion = extractVersion(FILES.pluginPHP);
-		console.log(`Current version: ${currentVersion}`);
+		if (!silent) {
+			console.log(`Current version: ${currentVersion}`);
+		}
 
 		// Calculate the new version
 		const newVersion = semver.inc(currentVersion, incrementType);
 		if (!newVersion) {
 			throw new Error(`Failed to calculate new version from ${currentVersion}`);
 		}
-		console.log(`New version: ${newVersion}`);
+		if (!silent) {
+			console.log(`New version: ${newVersion}`);
+		}
 
 		// Update all files
-		updateFileVersion(FILES.pluginPHP, currentVersion, newVersion);
-		updateFileVersion(FILES.packageJSON, currentVersion, newVersion);
-		updateFileVersion(FILES.readmeTXT, currentVersion, newVersion);
+		updateFileVersion(FILES.pluginPHP, currentVersion, newVersion, silent);
+		updateFileVersion(FILES.packageJSON, currentVersion, newVersion, silent);
+		updateFileVersion(FILES.readmeTXT, currentVersion, newVersion, silent);
 
-		console.log('Version updated successfully in all files.');
+		if (!silent) {
+			console.log('Version updated successfully in all files.');
+		}
 
 		return newVersion;
 	} catch (error) {
@@ -78,8 +88,11 @@ if (!['patch', 'minor', 'major'].includes(incrementType)) {
 	console.error('Invalid increment type. Use "patch", "minor", or "major".');
 	process.exit(1);
 }
+const silent = process.argv.includes('--silent');
 
 // Execute the updateVersion function
-const newVersion = updateVersion(incrementType);
+const newVersion = updateVersion(incrementType, silent);
+
+console.log(newVersion);
 
 module.exports = newVersion;

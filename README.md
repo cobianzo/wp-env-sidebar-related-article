@@ -130,9 +130,12 @@ check the 'readme-how-to-test.md'. You'll find tips about how to test. There is 
 
  # Deploy the .zip plugin
 
-`node .github/scripts/build-plugin.js`
+We have included a git action to create a downloadbe zip of the plugin for 30 days after every push 
+in the `main` branch, but you can create 
 
-will create `aside-related-article-block.zip` in the root folder, ready for distribution
+`node .github/scripts/build-plugin.js 1.5.0`
+
+will create `dist/aside-related-article-block-1.5.0.zip` in the root folder, ready for distribution
 
 # Troubles
 
