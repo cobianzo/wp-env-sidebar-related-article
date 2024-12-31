@@ -1,6 +1,6 @@
 {
 	"name": "aside-related-article-block",
-	"version": "1.1.15",
+	"version": "1.1.16",
 	"author": "@cobianzo",
 	"license": "GPL-2.0-or-later",
 	"homepage": "https://github.com/cobianzo/wp-env-sidebar-related-article",
@@ -31,7 +31,7 @@
 		"test:php:setup": "wp-env start",
 		"test:js": "playwright test",
 		"prepare": "husky",
-		"plugin-zip": "node .github/scripts/build-plugin.js",
+		"plugin-zip": "node bin/build-plugin.js",
 		"lint-staged": "lint-staged"
 	},
 	"stylelint": {
@@ -71,6 +71,7 @@
 		"stylelint-config-standard-scss": "^14.0.0"
 	},
 	"dependencies": {
-		"@cobianzo/gutenberg-post-lookup-component": "^2.0.1"
+		"@cobianzo/gutenberg-post-lookup-component": "^2.0.1",
+		"semver": "^7.6.3"
 	}
 }

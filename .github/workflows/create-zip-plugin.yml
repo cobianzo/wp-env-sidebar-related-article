@@ -1,0 +1,52 @@
+name: Update and Build Plugin
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Chequear el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Ejecutar el script para actualizar la versión
+      - name: Update plugin version
+        id: update_version
+        run: |
+          node update_plugin_version.js minor > new_version.txt
+          echo "VERSION=$(cat new_version.txt)" >> $GITHUB_ENV
+
+      # 5. Hacer commit del cambio de versión
+      - name: Commit version update
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Incrementar versión del plugin a ${{ env.VERSION }}"
+          git push
+
+      # 6. Construir el plugin
+      - name: Build plugin
+        run: node build-plugin.js ${{ env.VERSION }}
+
+      # 7. Subir el ZIP generado como artefacto
+      - name: Upload Plugin ZIP
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-${{ env.VERSION }}-zip
+          path: dist/plugin-${{ env.VERSION }}.zip
