@@ -133,9 +133,21 @@ check the 'readme-how-to-test.md'. You'll find tips about how to test. There is 
 We have included a git action to create a downloadbe zip of the plugin for 30 days after every push 
 in the `main` branch, but you can create 
 
-`node .github/scripts/build-plugin.js 1.5.0`
+`node .github/scripts/build-plugin.js`
 
-will create `dist/aside-related-article-block-1.5.0.zip` in the root folder, ready for distribution
+will create `dist/aside-related-article-block-1.5.0.zip` using the version from the comment in `aside-related-article-block.php`,
+ready for distribution. (see more in ./bin/readme-bin.md)
+
+# Continous Integration/ Development
+
+There are Playwright tests, but still not integrated in the Pull Requests.  
+
+We have a good linting exectued on every commit (js/css/phpcs).  
+
+In a Pull Request, we execute the linting again, and also the PHPUnit tests.
+
+In a merge, we execute the automatic version increase. By default we increase it as a patch (from x.y.2 to x.y.3).  
+We can increase a minor and major version update by including in the merge commit: `[minor update]`/`[major update]`
 
 # Troubles
 
@@ -153,8 +165,10 @@ npx wp-env run cli wp plugin activate aside-related-article-block
 # TODO
 
 - We need CI/CD for Playwright
+- Improve the github actions: use cache or artifacts to avoid repeating npm run build etc.
+- Move the artifact to an S3 bucket or a repo for the distribution.
 - Refactor to typescript
 - Transform most of the styles in the css into json styles, with variations.
 - Extend the tests for mobile devices and for other wordpress versions/themes
 - Localization (translation)
-- Add more options to the plugin: hide excerpt, allo edit the header and the read more ...
+- Add more options to the plugin: hide excerpt, allow editing the header and the read more ...

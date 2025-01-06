@@ -1,12 +1,12 @@
 # Aside Related Article Block
 
-Stable tag: 1.16.0  
-Tags: Related Article, recirc widget, block, floated block  
-Tested up to: 6.7  
-License: GPLv2 or later  
-License URI: https://www.gnu.org/licenses/gpl-2.0.html  
-Contributors: cobianzo  
-Requires at least: 6.3  
+Stable tag: 1.16.0
+Tags: Related Article, recirc widget, block, floated block
+Tested up to: 6.7
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Contributors: cobianzo
+Requires at least: 6.3
 Requires PHP: 8.0
 
 A custom block for displaying a "Related Article" widget, and it will be displayed inline on the left or right of the content
