@@ -1,8 +1,11 @@
-// the default npx wp-scripts plugin-zip has some small errors:
-// it doesnt include src and doesnt use my readme-plugin.md renamed into readme.md
+// the default npx wp-scripts plugin-zip had some small errors:
+// it doesnt include src and doesnt use my readme-plugin.txt renamed into readme.txt
 // so I create my own
 
-// Usage: node .github/scripts/build-plugin.js [version-number]
+// Usage:
+// node ./bin/build-plugin.js [--skip-compression*]
+// eg: node ./bin/build-plugin.js
+// eg: node ./bin/build-plugin.js --skip-compression
 
 const fs = require('fs').promises;
 const fsSync = require('fs');
@@ -10,19 +13,20 @@ const archiver = require('archiver');
 const path = require('path');
 
 class PluginBuilder {
-	constructor(version) {
+	constructor(version = null) {
 		// Configuración básica del plugin
 		this.pluginSlug = 'aside-related-article-block';
 		this.version = version;
 		this.distDir = 'dist';
 
 		// Lista de archivos y directorios a incluir
-		this.directories = ['lib', 'src', 'inc', 'screenshots', 'build'];
+		this.directories = ['src', 'inc', 'screenshots', 'build'];
 
+		// renaming the readme for the plugin.
 		this.files = [
 			{
-				source: 'README-plugin.md',
-				target: 'README.md',
+				source: 'README-plugin.txt',
+				target: 'readme.txt',
 			},
 			{
 				source: `${this.pluginSlug}.php`,
@@ -84,7 +88,7 @@ class PluginBuilder {
 
 	// Crea el archivo zip
 	async createZip() {
-		const zipFileName = `${this.distDir}/${this.pluginSlug}-${this.version}.zip`;
+		const zipFileName = `${this.distDir}/${this.pluginSlug}${this.version ? `-${this.version}` : ''}.zip`;
 		const output = fsSync.createWriteStream(zipFileName);
 		const archive = archiver('zip', { zlib: { level: 9 } });
 
@@ -123,18 +127,57 @@ class PluginBuilder {
 		});
 	}
 
+	async copyToDirectory() {
+		const targetDirectory = `${this.distDir}`;
+
+		try {
+			// Crear el directorio destino si no existe
+			if (!fsSync.existsSync(targetDirectory)) {
+				await fs.mkdir(targetDirectory, { recursive: true });
+			}
+
+			// Copiar directorios
+			for (const dir of this.directories) {
+				const targetDirPath = path.join(targetDirectory, path.basename(dir));
+				console.log(`Copiando directorio: ${dir} -> ${targetDirPath}`);
+				await fs.cp(dir, targetDirPath, { recursive: true });
+			}
+
+			// Copiar archivos individuales
+			for (const file of this.files) {
+				const targetFilePath = path.join(targetDirectory, file.target);
+				console.log(`Copiando archivo: ${file.source} -> ${targetFilePath}`);
+				// Crear el directorio del archivo si no existe
+				await fs.mkdir(path.dirname(targetFilePath), { recursive: true });
+				await fs.copyFile(file.source, targetFilePath);
+			}
+
+			console.log(`Archivos copiados exitosamente a: ${targetDirectory}`);
+		} catch (err) {
+			console.error('Ocurrió un error al copiar los archivos:', err);
+			throw err;
+		}
+	}
+
 	// Método principal que ejecuta todo el proceso
-	async build() {
+	async build(compress = true) {
 		try {
 			console.log(`Building plugin version ${this.version}...`);
 
 			await this.cleanDsStoreFiles();
 			await this.validateFiles();
 			await this.createDistDirectory();
-			const zipFile = await this.createZip();
-
 			console.log('Build completed successfully!');
-			return zipFile;
+
+			if (!compress) {
+				console.log('skipping compression. Creating in dir: ' + this.distDir);
+				this.copyToDirectory();
+				return this.distDir;
+			} else {
+				console.log('Build compressed!');
+				const zipFile = await this.createZip();
+				return zipFile;
+			}
 		} catch (error) {
 			console.error('Build failed:', error.message);
 			throw error;
@@ -144,25 +187,28 @@ class PluginBuilder {
 
 // Función principal para ejecutar el script
 async function main() {
-	// Obtener la versión del argumento de línea de comandos
-	const version = process.argv[2];
+	// Obtener la versión del argumento de línea de comandos (not used anymore, I prefer to extract it.)
+	//  const version = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : null;
+
+	const { extractVersion } = require('./version-helpers');
+	const version = extractVersion(path.join(__dirname, '../', 'aside-related-article-block.php'));
+
+	const skipCompression = [process.argv[2], process.argv[3]].includes('--skip-compression');
 
 	if (!version) {
-		console.error('Error: Version parameter is required');
-		console.log('Usage: node build-plugin.js <version>');
-		console.log('Example: node build-plugin.js 1.0.0');
-		process.exit(1);
-	}
-
-	// Validar formato de versión
-	if (!/^\d+\.\d+\.\d+$/.test(version)) {
-		console.error('Error: Version must be in format X.Y.Z (e.g., 1.0.0)');
-		process.exit(1);
+		console.error('Warning: Version parameter has not been specified');
+		// process.exit(1);
+	} else {
+		// Validar formato de versión
+		if (!/^\d+\.\d+\.\d+$/.test(version)) {
+			console.error('Error: Version must be in format X.Y.Z (e.g., 1.0.0)');
+			process.exit(1);
+		}
 	}
 
 	try {
-		const builder = new PluginBuilder(version);
-		await builder.build();
+		const builder = new PluginBuilder(version ?? null);
+		await builder.build(!skipCompression);
 	} catch (error) {
 		console.error('Build process failed:', error);
 		process.exit(1);

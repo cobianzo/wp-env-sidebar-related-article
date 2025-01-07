@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - main-just-testing
 
 jobs:
   pre-check:
@@ -15,15 +16,15 @@ jobs:
       should_run: ${{ steps.check.outputs.should_run }}
 
     steps:
-      - name: Check skip condition
+      - name: Check skip condition (avoid infinite loop triggering this action)
         id: check
         run: |
-          if [[ "${{ github.event.head_commit.message }}" == *"[skip ci]"* ]]; then
+          if [[ "${{ github.event.head_commit.message }}" == *"[skip version ci]"* ]]; then
             echo "should_run=false" >> $GITHUB_OUTPUT
-            echo "Skipping workflow due to [skip ci] in commit message"
+            echo "Skipping creating zip file artifact workflow due to [skip version ci] in commit message"
           else
             echo "should_run=true" >> $GITHUB_OUTPUT
-            echo "Commit message doesn't contain [skip ci], proceeding with workflow"
+            echo "Commit message doesn't contain [skip version ci], proceeding with workflow of creating zip file artifact"
           fi
 
   update-and-build:
@@ -46,12 +47,27 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Ejecutar el script para actualizar la versión
+      - name: Build js bundles
+        run: npm run build
+
+      # 4. Ejecutar el script para actualizar la versión.
+      # Using [major update] or [minor update] in the commit message will affect the version update.
       - name: Update plugin version
         id: update_version
         run: |
-          node bin/version-increment.js minor --silent  > new_version.txt
+          if [[ "${{ github.event.head_commit.message }}" == *"[major update]"* ]]; then
+            node bin/version-increment.js major --silent  > new_version.txt
+            echo "Updating MAJOR version in files"
+          elif [[ "${{ github.event.head_commit.message }}" == *"[minor update]"* ]]; then
+            node bin/version-increment.js minor --silent  > new_version.txt
+            echo "Updating MINOR version in files by default"
+            else
+            node bin/version-increment.js patch --silent  > new_version.txt
+            echo "Updating PATCH version in files"
+          fi
+
           echo "VERSION=$(cat new_version.txt)" >> $GITHUB_ENV
+          rm new_version.txt
 
       # 5. Hacer commit del cambio de versión
       - name: Commit version update and artifact link
@@ -62,7 +78,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "- [skip ci] Incrementar versión del plugin a ${{ env.VERSION }}
+          git commit -m "- [skip version ci] Incrementar versión del plugin a ${{ env.VERSION }}
 
           Plugin package details:
           - Version: ${{ env.VERSION }}
@@ -75,29 +91,29 @@ jobs:
           git push
 
 
-      # 6. Construir el plugin en dist/aside-related-article-block-x.x.x.zip
+      # 6. Construir el plugin en dist/... (we skip compression because the artifact compresses it automatically)
       - name: Build plugin
-        run: node bin/build-plugin.js ${{ env.VERSION }}
+        run: node bin/build-plugin.js ${{ env.VERSION }} --skip-compression
 
         # Verificar que el archivo ZIP existe
-      - name: Verify ZIP file
+      - name: Verify plugin main file is there
         run: |
-          ZIP_FILE="dist/aside-related-article-block-${{ env.VERSION }}.zip"
-          if [ ! -f "$ZIP_FILE" ]; then
-            echo "Error: ZIP file not found at: $ZIP_FILE"
+          MAIN_PLUGIN_FILE="dist/aside-related-article-block.php"
+          if [ ! -f "$MAIN_PLUGIN_FILE" ]; then
+            echo "Error: plugin file not found at dist/"
             echo "Contents of dist directory:"
             ls -la dist/
             exit 1
           fi
-          echo "ZIP file found: $ZIP_FILE"
-          echo "File size: $(ls -lh $ZIP_FILE | awk '{print $5}')"
+          echo "Main plugin file found: $MAIN_PLUGIN_FILE"
+          echo "File size: $(ls -lh $MAIN_PLUGIN_FILE | awk '{print $5}')"
 
       # 7. Subir el ZIP generado como artefacto
-      - name: Upload Plugin ZIP
+      - name: Upload Plugin Directory for Distribution as an ZIP Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: aside-related-article-block-${{ env.VERSION }}
-          path: dist/aside-related-article-block-${{ env.VERSION }}.zip
+          name: aside-related-article-block
+          path: dist/
           retention-days: 30
 
       # Add a comment to the commit/PR with the download link
