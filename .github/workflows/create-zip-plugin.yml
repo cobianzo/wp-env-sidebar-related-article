@@ -91,7 +91,7 @@ jobs:
           git push
 
 
-      # 6. Construir el plugin en dist/aside-related-article-block-x.x.x.zip
+      # 6. Construir el plugin en dist/... (we skip compression because the artifact compresses it automatically)
       - name: Build plugin
         run: node bin/build-plugin.js ${{ env.VERSION }} --skip-compression
 
@@ -113,7 +113,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: aside-related-article-block-${{ env.VERSION }}
-          path: dist/aside-related-article-block-${{ env.VERSION }}.zip
+          path: dist/
           retention-days: 30
 
       # Add a comment to the commit/PR with the download link
