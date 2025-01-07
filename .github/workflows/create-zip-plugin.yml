@@ -96,20 +96,20 @@ jobs:
         run: node bin/build-plugin.js ${{ env.VERSION }} --skip-compression
 
         # Verificar que el archivo ZIP existe
-      - name: Verify ZIP file
+      - name: Verify plugin main file is there
         run: |
-          ZIP_FILE="dist/aside-related-article-block-${{ env.VERSION }}.zip"
-          if [ ! -f "$ZIP_FILE" ]; then
-            echo "Error: ZIP file not found at: $ZIP_FILE"
+          MAIN_PLUGIN_FILE="dist/aside-related-article-block.php"
+          if [ ! -f "$MAIN_PLUGIN_FILE" ]; then
+            echo "Error: plugin file not found at dist/"
             echo "Contents of dist directory:"
             ls -la dist/
             exit 1
           fi
-          echo "ZIP file found: $ZIP_FILE"
-          echo "File size: $(ls -lh $ZIP_FILE | awk '{print $5}')"
+          echo "Main plugin file found: $MAIN_PLUGIN_FILE"
+          echo "File size: $(ls -lh $MAIN_PLUGIN_FILE | awk '{print $5}')"
 
       # 7. Subir el ZIP generado como artefacto
-      - name: Upload Plugin ZIP
+      - name: Upload Plugin Directory for Distribution as an ZIP Artifact
         uses: actions/upload-artifact@v3
         with:
           name: aside-related-article-block-${{ env.VERSION }}
