@@ -1,4 +1,12 @@
-// Usage: `node ./bin/version-increment.js`
+/**
+ * Calling this script updates the version of the plugin in
+ * every file where it is declared.
+ *
+ *
+ */
+// Usage: `node ./bin/version-increment.js` (uses patch by default)
+// Usage: `node ./bin/version-increment.js minor`
+// Usage: `node ./bin/version-increment.js major`
 
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +16,7 @@ const semver = require('semver');
 const FILES = {
 	pluginPHP: path.join(__dirname, '../', 'aside-related-article-block.php'),
 	packageJSON: path.join(__dirname, '../', 'package.json'),
-	readmeTXT: path.join(__dirname, '../', 'README-plugin.md'),
+	readmeTXT: path.join(__dirname, '../', 'README-plugin.txt'),
 };
 
 /**
@@ -26,20 +34,6 @@ function updateFileVersion(filePath, currentVersion, newVersion, silent = false)
 }
 
 /**
- * Extract the current version from a file.
- * @param {string} filePath - Path to the file.
- * @return {string} - The current version.
- */
-function extractVersion(filePath) {
-	const content = fs.readFileSync(filePath, 'utf-8');
-	const match = content.match(/\b\d+\.\d+\.\d+\b/); // Matches versions like 1.0.3
-	if (!match) {
-		throw new Error(`No version found in ${filePath}`);
-	}
-	return match[0];
-}
-
-/**
  * Main function to handle the version update.
  * @param {string} incrementType - Type of version increment (patch, minor, major).
  * @param {boolean} [silent=false] - If true, the function will not log anything to the console.
@@ -51,6 +45,8 @@ function updateVersion(incrementType = 'patch', silent = false) {
 		}
 
 		// Extract the current version from plugin.php (source of truth)
+		const { extractVersion } = require('./version-helpers');
+
 		const currentVersion = extractVersion(FILES.pluginPHP);
 		if (!silent) {
 			console.log(`Current version: ${currentVersion}`);
