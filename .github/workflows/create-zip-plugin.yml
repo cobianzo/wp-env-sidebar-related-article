@@ -112,7 +112,7 @@ jobs:
       - name: Upload Plugin Directory for Distribution as an ZIP Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: aside-related-article-block-${{ env.VERSION }}
+          name: aside-related-article-block
           path: dist/
           retention-days: 30
 
