@@ -22,17 +22,17 @@ class PluginBuilder {
 		// Lista de archivos y directorios a incluir
 		this.directories = ['src', 'inc', 'screenshots', 'build'];
 
-		// renaming the readme for the plugin.
-		this.files = [
-			{
-				source: 'README-plugin.txt',
-				target: 'readme.txt',
-			},
-			{
-				source: `${this.pluginSlug}.php`,
-				target: `${this.pluginSlug}.php`,
-			},
-		];
+		this.files = [`${this.pluginSlug}.php`, `package.json`];
+		this.files = this.files.map((file) => ({
+			source: file,
+			target: file,
+		}));
+
+		// files that change name from dev > dist: renaming the readme for the plugin.
+		this.files.push({
+			source: 'README-plugin.txt',
+			target: 'readme.txt',
+		});
 	}
 
 	// Limpia archivos .DS_Store que pueden causar problemas
