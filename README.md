@@ -3,6 +3,9 @@
 
 wp-env / wp-scripts (experimental) / phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
 
+This plugin can be used as a boilerplate to start other plugins with all these configurations.
+Read `BOILERPLATE-USE.md`
+
 This plugin creates a block called **Aside Related Article**. When inserted, it shows a widget in one side of the text,
 floated to the left, with the preview of the related article. You can choose what related article you want to display,
 or you can let the system find the newsest on the category or tag that you choose (amont the cats and tags associated to
@@ -25,7 +28,7 @@ Start environment with
 npm run up (or > npx wp-env start)
 ```
 
-you'll see somethign like this, where the MySQL ports might change.
+you'll see something like this, where the MySQL ports might change.
 ```
 WordPress development site started at http://localhost:8890
 WordPress test site started at http://localhost:8891
