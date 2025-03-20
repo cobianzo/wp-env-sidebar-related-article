@@ -1,7 +1,7 @@
 {
 	"extends": [
 		"plugin:@wordpress/eslint-plugin/recommended-with-formatting",
-		"prettier"
+		"plugin:prettier/recommended"
 	],
 	"ignorePatterns": [
 		"build/**/*",
@@ -15,7 +15,7 @@
 		"max-len": [
 			"error",
 			{
-				"code": 115
+				"code": 120
 			}
 		]
 	}

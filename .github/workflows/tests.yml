@@ -1,10 +1,6 @@
 name: PHPUnit Tests
 
 on:
-  push:
-    branches:
-      - main
-      - develop
   pull_request:
     branches:
       - main
@@ -50,7 +46,7 @@ jobs:
         wp db create --allow-root
         wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
 
-    - name: Check out repository
+    - name: Check out repository as a plugin
       uses: actions/checkout@v3
       with:
         path: wp-content/plugins/aside-related-article-block
