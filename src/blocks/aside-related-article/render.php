@@ -27,6 +27,7 @@ $parent_post_id = get_the_ID();
 
 // in production we don't want old posts. In dev we need a larger range 'cause data is more static.
 $days_range = 'production' === wp_get_environment_type() ? 30 : 180;
+$days_range = apply_filters( 'coco_relatedarticle_days_range', $days_range, $parent_post_id );
 $query_args = array_merge( array(
 	// Retrieve two posts, in case the first one is the same as the current edited post.
 	'posts_per_page'         => 2,
@@ -112,7 +113,8 @@ if ( ! $is_in_editor ) :
 	<?php
 endif;
 
-	$container_classes = isset( $main_category ) ? 'cat-' . $main_category->slug : '';
+	$cat_slug          = $main_category->slug ?? '';
+	$container_classes = isset( $main_category ) ? 'cat-' . $cat_slug : '';
 	$container_classes = apply_filters( 'coco_relatedarticle_classes', $container_classes, $the_post, $parent_post_id, $attributes );
 ?>
 	<div class="coco-related-article <?php echo esc_attr( $container_classes ); ?>">
